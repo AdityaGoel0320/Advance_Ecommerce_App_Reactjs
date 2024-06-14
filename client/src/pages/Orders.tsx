@@ -18,7 +18,7 @@ const Orders = () => {
   const { currentUser } = store();
   const [orders, setOrders] = useState<OrderTypes[]>([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {

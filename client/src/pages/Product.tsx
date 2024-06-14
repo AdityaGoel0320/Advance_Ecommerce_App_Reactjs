@@ -15,6 +15,7 @@ import PriceTag from "../ui/PriceTag";
 import ProductCard from "../ui/ProductCard";
 import Loading from "../ui/Loading";
 import ProductFeatures from "../ui/ProductFeatures";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Product = () => {
   const [productData, setProductData] = useState<ProductProps | null>(null);
