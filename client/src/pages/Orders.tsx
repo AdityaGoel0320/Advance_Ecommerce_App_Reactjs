@@ -12,7 +12,7 @@ import { store } from "../lib/store";
 import Container from "../ui/Container";
 import Loading from "../ui/Loading";
 import FormattedPrice from "../ui/FormattedPrice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const { currentUser } = store();
