@@ -1,5 +1,5 @@
 import { FiShoppingBag, FiStar, FiUser } from "react-icons/fi";
-import { HiChevronDown } from "react-icons/hi";
+// import { HiChevronDown } from "react-icons/hi";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { Link, useLoaderData } from "react-router-dom";
 import { logo } from "../assets";
@@ -15,8 +15,9 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { FaChevronDown, FaPencil } from "react-icons/fa6";
+import { FaChevronDown } from "react-icons/fa6";
 import { getData } from "../lib";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Header = () => {
   const [searchText, setSearchText] = useState("");
@@ -42,7 +43,7 @@ const Header = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/categories";
+      const endpoint = `${backendUrl}/categories`;
       try {
         const data = await getData(endpoint);
         setCategories(data);

@@ -1,13 +1,13 @@
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Container from "../ui/Container";
 import { useEffect, useState } from "react";
 import { store } from "../lib/store";
 import {
-  DocumentSnapshot,
+  // DocumentSnapshot,
   arrayUnion,
   doc,
   getDoc,
-  serverTimestamp,
+  // serverTimestamp,
   setDoc,
   updateDoc,
 } from "firebase/firestore";

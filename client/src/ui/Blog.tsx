@@ -3,12 +3,13 @@ import { getData } from "../lib";
 import Container from "./Container";
 import Title from "./Title";
 import { BlogProps } from "../../type";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Blog = () => {
   const [blogsData, setBlogsData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/blogs";
+      const endpoint = `${backendUrl}/blogs`;
       try {
         const data = await getData(endpoint);
         setBlogsData(data);

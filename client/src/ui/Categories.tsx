@@ -4,13 +4,14 @@ import Container from "./Container";
 import { CategoryProps } from "../../type";
 import { Link } from "react-router-dom";
 import Title from "./Title";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/categories";
+      const endpoint = `${backendUrl}/categories`;
       try {
         const data = await getData(endpoint);
         setCategories(data);

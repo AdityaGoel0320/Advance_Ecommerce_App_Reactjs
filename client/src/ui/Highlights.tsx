@@ -3,12 +3,15 @@ import { getData } from "../lib";
 import Container from "./Container";
 import { HighlightsType } from "../../type.ts";
 import { Link } from "react-router-dom";
+import { backendUrl } from "../assets/FrontendUtils.tsx"
+
+
 
 const Highlights = () => {
   const [highlightsData, setHighlightsData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/highlights";
+      const endpoint = `${backendUrl}/highlights`;
       try {
         const data = await getData(endpoint);
         setHighlightsData(data);

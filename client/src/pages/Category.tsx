@@ -6,6 +6,7 @@ import CategoryFilters from "../ui/CategoryFilters";
 import Container from "../ui/Container";
 import ProductCard from "../ui/ProductCard";
 import Loading from "../ui/Loading";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Category = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const Category = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = `http://localhost:8000/categories/${id}`;
+      const endpoint = `${backendUrl}/categories/${id}`;
       try {
         setLoading(true);
         const data = await getData(endpoint);

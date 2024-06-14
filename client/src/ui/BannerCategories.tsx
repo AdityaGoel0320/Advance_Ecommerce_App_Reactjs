@@ -6,6 +6,7 @@ import CustomLeftArrow from "./bannerBtn/CustomLeftArrow";
 import CustomRightArrow from "./bannerBtn/CustomRightArrow";
 import { getData } from "../lib";
 import { CategoryProps } from "../../type";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const responsive = {
   superLargeDesktop: {
@@ -32,7 +33,7 @@ const BannerCategories = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/categories";
+      const endpoint = `${backendUrl}/categories`;
       try {
         const data = await getData(endpoint);
         setCategories(data);

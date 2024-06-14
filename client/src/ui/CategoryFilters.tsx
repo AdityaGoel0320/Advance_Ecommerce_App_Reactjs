@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CategoryProps } from "../../type";
 import { getData } from "../lib";
 import { Link } from "react-router-dom";
+import { backendUrl } from "../assets/FrontendUtils";
 
 interface Props {
   id: string | undefined;
@@ -11,7 +12,7 @@ const CategoryFilters = ({ id }: Props) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint = "http://localhost:8000/categories";
+      const endpoint = `${backendUrl}/categories`;
       try {
         const data = await getData(endpoint);
         setCategories(data);

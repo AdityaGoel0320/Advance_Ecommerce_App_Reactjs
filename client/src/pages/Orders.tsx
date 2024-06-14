@@ -41,9 +41,9 @@ const Orders = () => {
     getData();
   }, []);
 
-  const handleNavigate = (props: number) => {
-    navigate(`/product/${props}`);
-  };
+  // const handleNavigate = (props: number) => {
+  //   navigate(`/product/${props}`);
+  // };
 
   return (
     <Container>

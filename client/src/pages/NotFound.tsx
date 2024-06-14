@@ -6,7 +6,7 @@ import {
   HiRss,
 } from "react-icons/hi2";
 import { LuChevronRight } from "react-icons/lu";
-import { Link, useLocation } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import LinkButton from "../ui/LinkButton";
 
 const links = [

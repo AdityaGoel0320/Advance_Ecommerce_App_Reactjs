@@ -1,4 +1,5 @@
 import { ProductProps } from "../../../type";
+import { backendUrl } from "../../assets/FrontendUtils";
 import { store } from "../../lib/store";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -14,7 +15,7 @@ const CheckoutBtn = ({ products, totalAmt }: Props) => {
   const handleCheckout = async () => {
     const stripe = await stripePromise;
 
-    const response = await fetch("http://localhost:8000/checkout", {
+    const response = await fetch(`${backendUrl}/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

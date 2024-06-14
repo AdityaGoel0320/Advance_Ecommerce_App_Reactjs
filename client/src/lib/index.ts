@@ -1,4 +1,5 @@
 import axios from "axios";
+import { backendUrl } from "../assets/FrontendUtils";
 export const getData = async (endpoint: string) => {
   try {
     const response = await fetch(endpoint, {
@@ -22,6 +23,6 @@ export const getData = async (endpoint: string) => {
 };
 
 export const getProducts = async () => {
-  const products = await axios.get("http://localhost:8000/products");
+  const products = await axios.get(`${backendUrl}/products`);
   return products;
 };
