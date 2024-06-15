@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Stripe from "stripe";
+import { FrontendUtils } from "../constants/BackendUtils";
 
 const router = Router();
 
@@ -41,7 +42,7 @@ router.post("/checkout", async (req, res) => {
       payment_method_types: ["card"],
       line_items: extractingItems,
       mode: "payment",
-      success_url: "https://advance-ecommerce-app-reactjs-da4u-3k0qdzloc.vercel.app/success?session_id={CHECKOUT_SESSION_ID}",
+      success_url: `${FrontendUtils}/success/${CHECKOUT_SESSION_ID}`,
       cancel_url: "https://advance-ecommerce-app-reactjs-da4u-3k0qdzloc.vercel.app/cancel",
       metadata: {
         email,
