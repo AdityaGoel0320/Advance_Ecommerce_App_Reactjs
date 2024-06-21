@@ -1,6 +1,5 @@
 import { Router } from "express";
 import Stripe from "stripe";
-import { FrontendUtils } from "../constants/BackendUtils";
 
 const router = Router();
 
@@ -39,15 +38,18 @@ router.post("/checkout", async (req, res) => {
     console.log("Extracted Items:", extractingItems);
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: extractingItems,
-      mode: "payment",
-      success_url: `${FrontendUtils}/success/${CHECKOUT_SESSION_ID}`,
-      cancel_url: "https://advance-ecommerce-app-reactjs-da4u-3k0qdzloc.vercel.app/cancel",
-      metadata: {
-        email,
-      },
-    });
+  payment_method_types: ["card"],
+  line_items: extractingItems,
+  mode: "payment",
+  success_url: `http://localhost:5173/success/{CHECKOUT_SESSION_ID}`,
+  cancel_url: "http://localhost:5173/cancel",
+  metadata: {
+    email,
+  },
+});
+
+
+    // success_url: `http://localhost:5173/success/${CHECKOUT_SESSION_ID}`,
 
     console.log("Session Created:", session);
 
