@@ -61,7 +61,6 @@ const Header = () => {
     { title: "Cart", link: "/cart" },
     { title: "Orders", link: "/orders" },
     { title: "My Account", link: "/profile" },
-    { title: "Blog", link: "/blog" },
   ];
   return (
     <div className="w-full bg-whiteText sticky top-0 z-50">
@@ -119,10 +118,10 @@ const Header = () => {
             )}
           </Link>
           <Link to={"/favorite"} className="relative block">
-            <FiStar className="hover:text-skyText duration-200 cursor-pointer" />
+            {/* <FiStar className="hover:text-skyText duration-200 cursor-pointer" />
             <span className="inline-flex items-center justify-center bg-redText text-whiteText absolute -top-1 -right-2 text-[9px] w-4 h-4 rounded-full">
               {favoriteProduct?.length ? favoriteProduct?.length : 0}
-            </span>
+            </span> */}
           </Link>
           <Link to={"/cart"} className="relative block">
             <FiShoppingBag className="hover:text-skyText duration-200 cursor-pointer" />
