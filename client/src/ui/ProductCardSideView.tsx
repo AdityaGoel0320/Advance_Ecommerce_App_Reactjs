@@ -1,8 +1,5 @@
-import { FaRegEye, FaRegStar, FaStar } from "react-icons/fa6";
-import { LuArrowLeftRight } from "react-icons/lu";
 import { store } from "../lib/store";
 import { ProductProps } from "../../type";
-import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 const ProductCardSideView = ({ product }: { product?: ProductProps }) => {
@@ -19,17 +16,6 @@ const ProductCardSideView = ({ product }: { product?: ProductProps }) => {
     setExistingProduct(availableItem || null);
   }, [product, favoriteProduct]);
 
-  const handleFavorite = () => {
-    if (product) {
-      addToFavorite(product).then(() => {
-        toast.success(
-          existingProduct
-            ? `${product?.name.substring(0, 10)} removed successfully!`
-            : `${product?.name.substring(0, 10)} added successfully!`
-        );
-      });
-    }
-  };
 
   return (
     <div className="absolute right-1 top-1 flex flex-col gap-1 transition translate-x-12 group-hover:translate-x-0 duration-300">

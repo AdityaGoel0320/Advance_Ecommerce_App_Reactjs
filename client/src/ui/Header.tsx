@@ -1,4 +1,4 @@
-import { FiShoppingBag, FiStar, FiUser } from "react-icons/fi";
+import { FiShoppingBag,  FiUser } from "react-icons/fi";
 // import { HiChevronDown } from "react-icons/hi";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { Link, useLoaderData } from "react-router-dom";
@@ -22,7 +22,7 @@ import { backendUrl } from "../assets/FrontendUtils";
 const Header = () => {
   const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState([]);
-  const { currentUser, cartProduct, favoriteProduct } = store();
+  const { currentUser, cartProduct } = store();
 
   const data: any = useLoaderData();
   useEffect(() => {
