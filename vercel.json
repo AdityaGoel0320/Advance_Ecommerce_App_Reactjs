@@ -1,6 +1,3 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/success/:id", "dest": "/success" }
-  ]
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }
