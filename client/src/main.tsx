@@ -18,6 +18,7 @@ import Favorite from "./pages/Favorite.tsx";
 import Success from "./pages/Success.tsx";
 import Cancel from "./pages/Cancel.tsx";
 import Orders from "./pages/Orders.tsx";
+import IdPage from "./pages/IdPage.tsx";
 
 const RouterLayout = () => {
   return (
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: "/success/:sessionId",
         element: <Success />,
+      },
+      {
+        path: "/:sessionId",
+        element: <IdPage/>,
       },
       {
         path: "/cancel",
