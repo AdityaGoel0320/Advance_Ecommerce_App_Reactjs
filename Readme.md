@@ -80,6 +80,58 @@ To run Shopp.my locally, follow these steps:
 
 5. Open your browser and navigate to `http://localhost:5173`
 
+## Repair, Verification, and Deployment
+
+From the repository root:
+
+```bash
+npm --prefix client ci
+npm --prefix client test
+npm --prefix client run build
+npm --prefix client run dev
+```
+
+Authentication is observed across all pages. A missing or inaccessible Firestore
+profile no longer prevents a Firebase-authenticated user from signing in, and a
+product API outage no longer blocks the account page. Cart and favorites remain
+saved locally, but authentication state comes from Firebase instead of a stale
+local user record.
+
+### Missing Images
+
+All 42 original catalogue image URLs returned HTTP 404 during verification.
+ImgBB sends a decodable error PNG with that response, so browser image-loading
+checks alone can incorrectly report success. The affected URLs now map to a local
+"Image unavailable" placeholder, not replacement product photography.
+
+To restore the actual photos, recover the original files or provide valid image
+URLs. Local photos belong in `client/public/catalog/`; map each original URL to
+its local `/catalog/filename` path in `client/src/lib/catalogImages.json`.
+After updating the catalogue source URLs, `npm --prefix client run images:sync`
+downloads available originals and regenerates that mapping. The command reports
+missing sources and exits unsuccessfully when any download fails; unavailable
+images receive a local placeholder. Commit downloaded assets with the mapping.
+
+### Vercel and Firebase
+
+Redeploy the changed frontend to update the live site. In Vercel, use `client`
+as the root directory, `npm run build` as the build command, and `dist` as the
+output directory. These local changes do not update an existing deployment.
+
+In the Firebase project used by `client/src/lib/firebase.ts`:
+
+- Enable the Email/Password sign-in provider.
+- Add `shopp-my-frontend.vercel.app` and your other deployment domains to
+   Authentication's authorized domains. Add `localhost` for local testing if needed.
+- Verify Firestore and Storage rules allow each authenticated user to access only
+   their own permitted data. Do not make either service publicly writable.
+- Verify the Storage bucket is active and billing requirements are satisfied if
+   profile photo uploads are enabled.
+
+Real account sign-in, profile writes, and payment completion require access to
+the configured Firebase and Stripe services. The regression suite uses simulated
+profile failures and does not create production accounts or charge cards.
+
 ## **Technologies Used**
 
 - **Frontend**: React, TypeScript, Bootstrap

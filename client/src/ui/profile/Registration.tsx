@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import uploadImage from "../../lib/upload";
 import { doc, setDoc } from "firebase/firestore";
@@ -6,12 +6,14 @@ import { auth, db } from "../../lib/firebase";
 import Login from "./Login";
 import { MdPhotoLibrary } from "react-icons/md";
 import Label from "./Label";
+import toast from "react-hot-toast";
+import { store } from "../../lib/store";
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState(true);
   const [errMsg, setErrMsg] = useState("");
-  const [avatar, setAvatar] = useState({
+  const [avatar, setAvatar] = useState<{ file: File | null; url: string }>({
     file: null,
     url: "",
   });
@@ -26,6 +28,8 @@ const Registration = () => {
 
   const handleRegistration = async (e: any) => {
     e.preventDefault();
+    if (loading) return;
+    setErrMsg("");
     setLoading(true);
     const formData = new FormData(e.target);
     const { firstName, lastName, email, password }: any =
@@ -33,17 +37,26 @@ const Registration = () => {
     // console.log("name", firstName, lastName, email, password, avatar.url);
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      let imgUrl = null;
-      if (avatar && avatar.file) {
-        imgUrl = await uploadImage(avatar.file);
+      try {
+        await updateProfile(res.user, { displayName: `${firstName} ${lastName}`.trim() });
+        void store.getState().getUserInfo(res.user.uid);
+        let imgUrl = null;
+        if (avatar.file) {
+          imgUrl = await uploadImage(avatar.file);
+          await updateProfile(res.user, { photoURL: imgUrl });
+        }
+        await setDoc(doc(db, "users", res.user.uid), {
+          firstName,
+          lastName,
+          email,
+          avatar: imgUrl,
+          id: res.user.uid,
+        });
+        void store.getState().getUserInfo(res.user.uid);
+      } catch (profileError) {
+        console.error("Account created, but profile could not be saved", profileError);
+        toast.error("Your account was created, but your profile could not be saved.");
       }
-      await setDoc(doc(db, "users", res.user.uid), {
-        firstName,
-        lastName,
-        email,
-        avatar: imgUrl,
-        id: res.user.uid,
-      });
       setLogin(true);
     } catch (error: any) {
       let errorMessage;
@@ -53,6 +66,15 @@ const Registration = () => {
           break;
         case "auth/missing-password":
           errorMessage = "Please enter a password.";
+          break;
+        case "auth/weak-password":
+          errorMessage = "Use a password with at least six characters.";
+          break;
+        case "auth/network-request-failed":
+          errorMessage = "Unable to connect. Check your connection and try again.";
+          break;
+        case "auth/operation-not-allowed":
+          errorMessage = "Registration is unavailable. Please contact the store.";
           break;
         case "auth/email-already-in-use":
           errorMessage = "This email is already in use. Try another email.";

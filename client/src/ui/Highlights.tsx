@@ -38,14 +38,15 @@ const Highlights = () => {
           <div
             className="absolute inset-0 bg-cover bg-center rounded-lg transition-transform duration-300 group-hover:scale-110"
             style={{
-              backgroundImage: `url(${item?.image})`,
+              backgroundImage: item?.image?.endsWith("image-unavailable.svg") ? undefined : `url(${item?.image})`,
+              backgroundColor: item?.image?.endsWith("image-unavailable.svg") ? "#f3f4f6" : undefined,
               color: item?.color,
             }}
           ></div>
           <div
             className="relative z-10 p-6 flex flex-col justify-between h-full"
             style={{
-              color: item?.color,
+              color: item?.image?.endsWith("image-unavailable.svg") ? "#111827" : item?.color,
             }}
           >
             <div>

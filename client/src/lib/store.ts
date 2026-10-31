@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { ProductProps } from "../../type";
 import { persist } from "zustand/middleware";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
 
 interface CartProduct extends ProductProps {
   quantity: number;
@@ -11,7 +11,6 @@ interface CartProduct extends ProductProps {
 interface UserType {
   firstName: string;
   lastName: string;
-  password: string;
   email: string;
   avatar: string;
   id: string;
@@ -58,18 +57,26 @@ export const store = create<StoreType>()(
       favoriteProduct: [],
       getUserInfo: async (uid: any) => {
         if (!uid) return set({ currentUser: null, isLoading: false });
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
+        const user = auth.currentUser;
+        if (!user || user.uid !== uid) return;
+        const fallbackUser: UserType = {
+          firstName: user.displayName || user.email?.split("@")[0] || "Customer",
+          lastName: "",
+          email: user.email || "",
+          avatar: user.photoURL || "",
+          id: user.uid,
+        };
+        set({ currentUser: fallbackUser, isLoading: false });
 
         try {
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+          if (auth.currentUser?.uid !== uid) return;
           if (docSnap.exists()) {
-            set({ currentUser: docSnap.data() as UserType, isLoading: false });
-          } else {
-            set({ currentUser: null, isLoading: false });
+            set({ currentUser: { ...fallbackUser, ...docSnap.data(), id: uid }, isLoading: false });
           }
         } catch (error) {
           console.log("useUserStore error: ", error);
-          set({ currentUser: null, isLoading: false });
         }
       },
       addToCart: (product: ProductProps) => {
@@ -159,6 +166,18 @@ export const store = create<StoreType>()(
     {
       name: "store-storage",
       storage: customStorage,
+      partialize: (state) => ({
+        cartProduct: state.cartProduct,
+        favoriteProduct: state.favoriteProduct,
+      }),
+      merge: (persistedState, currentState) => {
+        const saved = persistedState as Partial<StoreType> | undefined;
+        return {
+          ...currentState,
+          cartProduct: saved?.cartProduct || [],
+          favoriteProduct: saved?.favoriteProduct || [],
+        };
+      },
     }
   )
 );

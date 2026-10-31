@@ -9,11 +9,13 @@ const Login = ({ setLogin }: any) => {
   const [errMsg, setErrMsg] = useState("");
   const handleLogin = async (e: any) => {
     e.preventDefault();
+    if (loading) return;
+    setErrMsg("");
     setLoading(true);
     try {
       const formData = new FormData(e.target);
       const { email, password }: any = Object.fromEntries(formData);
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (error: any) {
       let errorMessage;
       switch (error.code) {
@@ -27,7 +29,21 @@ const Login = ({ setLogin }: any) => {
           errorMessage = "Invalid email address.";
           break;
         case "auth/invalid-credential":
-          errorMessage = "Email or Password not matched";
+          errorMessage = "Email or password does not match.";
+          break;
+        case "auth/network-request-failed":
+          errorMessage = "Unable to connect. Check your connection and try again.";
+          break;
+        case "auth/too-many-requests":
+          errorMessage = "Too many attempts. Please try again later.";
+          break;
+        case "auth/user-disabled":
+          errorMessage = "This account has been disabled. Please contact the store.";
+          break;
+        case "auth/operation-not-allowed":
+        case "auth/invalid-api-key":
+        case "auth/unauthorized-domain":
+          errorMessage = "Sign-in is unavailable. Please contact the store.";
           break;
         // Add more cases as needed
         default:
@@ -62,6 +78,8 @@ const Login = ({ setLogin }: any) => {
                 <input
                   name="email"
                   type="email"
+                  required
+                  autoComplete="email"
                   className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -72,6 +90,8 @@ const Login = ({ setLogin }: any) => {
                 <input
                   name="password"
                   type="password"
+                  required
+                  autoComplete="current-password"
                   className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -87,6 +107,7 @@ const Login = ({ setLogin }: any) => {
 
         <button
           type="submit"
+          disabled={loading}
           className="mt-5 bg-indigo-700 w-full py-2 uppercase text-base font-bold tracking-wide text-gray-300 rounded-md hover:text-white hover:bg-indigo-600 duration-200"
         >
           {loading ? "Loading..." : "Sign in"}

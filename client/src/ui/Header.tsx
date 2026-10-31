@@ -1,7 +1,7 @@
 import { FiShoppingBag,  FiUser } from "react-icons/fi";
 // import { HiChevronDown } from "react-icons/hi";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { logo } from "../assets";
 import Container from "./Container";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import { FaChevronDown } from "react-icons/fa6";
-import { getData } from "../lib";
+import { getData, getProducts } from "../lib";
 import { backendUrl } from "../assets/FrontendUtils";
 
 const Header = () => {
@@ -24,10 +24,15 @@ const Header = () => {
   const [products, setProducts] = useState([]);
   const { currentUser, cartProduct } = store();
 
-  const data: any = useLoaderData();
   useEffect(() => {
-    setProducts(data?.data);
-  }, [data]);
+    let active = true;
+    getProducts()
+      .then(({ data }) => {
+        if (active) setProducts(data);
+      })
+      .catch((error) => console.error("Error loading search products", error));
+    return () => { active = false; };
+  }, []);
 
   // Filtered products
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -37,7 +42,7 @@ const Header = () => {
       item?.name.toLocaleLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredProducts(filtered);
-  }, [searchText]);
+  }, [searchText, products]);
 
   const [categories, setCategories] = useState([]);
 
@@ -108,9 +113,10 @@ const Header = () => {
 
         <div className="flex items-center gap-x-6 text-2xl">
           <Link to={"/profile"}>
-            {currentUser ? (
+            {currentUser?.avatar ? (
               <img
                 src={currentUser?.avatar}
+                alt="Your profile"
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (

@@ -19,6 +19,10 @@ import Success from "./pages/Success.tsx";
 import Cancel from "./pages/Cancel.tsx";
 import Orders from "./pages/Orders.tsx";
 import IdPage from "./pages/IdPage.tsx";
+import { handleImageError, handleImageLoad } from "./lib/imageFallback";
+
+document.addEventListener("error", handleImageError, true);
+document.addEventListener("load", handleImageLoad, true);
 
 const RouterLayout = () => {
   return (
@@ -33,12 +37,20 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RouterLayout />,
-    loader: getProducts,
     children: [
       {
         path: "/",
         element: <App />,
         loader: getProducts,
+        errorElement: (
+          <div className="max-w-screen-xl mx-auto px-4 py-16 text-center">
+            <h1 className="text-2xl font-semibold">Products are temporarily unavailable</h1>
+            <p className="mt-3">Please try again in a moment.</p>
+            <button className="mt-5 border px-4 py-2" onClick={() => location.reload()}>
+              Retry
+            </button>
+          </div>
+        ),
       },
       {
         path: "product",

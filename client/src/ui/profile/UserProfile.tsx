@@ -1,4 +1,5 @@
 import { auth } from "../../lib/firebase";
+import { FiUser } from "react-icons/fi";
 
 const UserProfile = ({ currentUser }: any) => {
   return (
@@ -17,15 +18,15 @@ const UserProfile = ({ currentUser }: any) => {
           id veniam aliqua proident excepteur commodo do ea.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4">
-          <img
-            src={
-              currentUser?.avatar
-                ? currentUser?.avatar
-                : "https://i.ibb.co/mJRkRRV/png-clipart-profile-logo-computer-icons-user-user-blue-heroes-thumbnail.png"
-            }
-            alt="userImage"
-            className="w-52 h-auto rounded-lg border border-gray-700 object-cover p-1"
-          />
+          {currentUser?.avatar ? (
+            <img
+              src={currentUser.avatar}
+              alt="Your profile"
+              className="w-52 h-52 rounded-lg border border-gray-700 object-cover p-1"
+            />
+          ) : (
+            <FiUser aria-label="Your profile" className="w-52 h-52 text-gray-300" />
+          )}
           <button
             onClick={() => auth.signOut()}
             className="rounded-md bg-white w-52 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
