@@ -99,18 +99,24 @@ local user record.
 
 ### Missing Images
 
-All 42 original catalogue image URLs returned HTTP 404 during verification.
-ImgBB sends a decodable error PNG with that response, so browser image-loading
-checks alone can incorrectly report success. The affected URLs now map to a local
-"Image unavailable" placeholder, not replacement product photography.
+The original ImgBB catalogue links are unavailable. All 42 image references now
+map to bundled, category-appropriate photos in `frontend/public/catalog/`,
+including products, categories, promotional banners, and blog cards.
+These licensed [Unsplash photos](https://unsplash.com/license) are representative
+demo imagery, not verified photographs of every exact SKU. Replace the mappings
+in `frontend/src/lib/catalogImages.json` with seller-provided SKU photos before
+production use.
 
-To restore the actual photos, recover the original files or provide valid image
-URLs. Local photos belong in `client/public/catalog/`; map each original URL to
-its local `/catalog/filename` path in `client/src/lib/catalogImages.json`.
-After updating the catalogue source URLs, `npm --prefix client run images:sync`
-downloads available originals and regenerates that mapping. The command reports
-missing sources and exits unsuccessfully when any download fails; unavailable
-images receive a local placeholder. Commit downloaded assets with the mapping.
+Run `npm --prefix frontend run images:sync` to refresh the bundled photos.
+Source photo IDs are recorded in `frontend/scripts/sync-images.mjs`. Failed
+downloads leave the existing manifest intact and report an error. Commit the
+downloaded assets with the manifest. Old cart/order placeholders recover their
+category image automatically.
+
+All monetary amounts use INR and Indian digit grouping; existing numeric prices
+are preserved. The account dashboard supports editable names and profile photos,
+with initials when no photo exists. Uploads accept JPG, PNG, and WebP up to 5 MB
+and require the configured Firebase Storage permissions.
 
 ### Vercel and Firebase
 
@@ -134,7 +140,7 @@ profile failures and does not create production accounts or charge cards.
 
 ## **Technologies Used**
 
-- **Frontend**: React, TypeScript, Bootstrap
+- **Frontend**: React, TypeScript, Tailwind CSS
 - **Backend**: Node.js, Express
 - **Database**: MongoDB
 - **Authentication**: Firebase Authentication

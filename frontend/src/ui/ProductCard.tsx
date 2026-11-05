@@ -13,6 +13,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import FormattedPrice from "./FormattedPrice";
+import { resolveCatalogImage } from "../lib/catalogImage";
 interface Props {
   item: ProductProps;
   setSearchText?: (text: string) => void;
@@ -53,7 +54,7 @@ const ProductCard = ({ item, setSearchText }: Props) => {
         </button>}
         <button type="button" onClick={handleProduct} aria-label={`View ${item.name}`} className="block h-full w-full p-4 sm:p-6">
           <img
-            src={item?.images[0]}
+            src={resolveCatalogImage(item.images[0], item._base, import.meta.env.BASE_URL)}
             alt={item.name}
             loading="lazy"
             className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"

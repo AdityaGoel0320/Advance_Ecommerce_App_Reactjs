@@ -9,6 +9,7 @@ import { getData, getProducts } from "../lib";
 import { store } from "../lib/store";
 import ProductCard from "./ProductCard";
 import ThemeToggle from "./ThemeToggle";
+import UserAvatar from "./profile/UserAvatar";
 
 const navigation = [
   { title: "Overview", link: "/" },
@@ -92,7 +93,7 @@ const Header = () => {
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
           <Link to="/profile" aria-label="My account" className="icon-button hidden sm:inline-flex">
-            {currentUser?.avatar ? <img src={currentUser.avatar} alt="" className="h-7 w-7 rounded-full object-cover" /> : <FiUser size={19} />}
+            {currentUser ? <UserAvatar name={`${currentUser.firstName} ${currentUser.lastName}`} src={currentUser.avatar} className="h-8 w-8 text-xs" /> : <FiUser size={19} />}
           </Link>
           <Link to="/cart" aria-label={`Shopping cart, ${cartProduct.length} items`} className="icon-button relative">
             <FiShoppingBag size={19} />

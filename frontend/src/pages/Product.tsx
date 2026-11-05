@@ -68,7 +68,7 @@ const Product = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="panel flex min-w-0 items-start gap-3 p-3 sm:p-5">
                 <div className="w-16 shrink-0 space-y-3 sm:w-20">
-                  {productData?.images?.map((item) => (
+                  {[...new Set(productData.images)].map((item) => (
                     <img
                       key={item}
                       src={item}

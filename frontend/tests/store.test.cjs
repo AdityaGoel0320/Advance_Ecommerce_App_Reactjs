@@ -63,7 +63,19 @@ test("legacy persisted users are ignored while cart items are retained", () => {
     cartProduct: [{ _id: 1, quantity: 2 }],
     favoriteProduct: [],
   });
+
   assert.equal(store.getState().currentUser, null);
   assert.equal(store.getState().isLoading, true);
   assert.equal(store.getState().cartProduct[0].quantity, 2);
+});
+
+test("a missing Firestore avatar does not override the Firebase profile photo", async () => {
+  const { store, auth } = loadStore(async () => ({
+    exists: () => true,
+    data: () => ({ firstName: "Test", avatar: null, email: "stale@example.com" }),
+  }));
+  auth.currentUser.photoURL = "https://storage.example/avatar.jpg";
+  await store.getState().getUserInfo("test-user");
+  assert.equal(store.getState().currentUser.avatar, "https://storage.example/avatar.jpg");
+  assert.equal(store.getState().currentUser.email, "customer@example.com");
 });

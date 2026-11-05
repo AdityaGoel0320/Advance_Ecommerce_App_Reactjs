@@ -1,10 +1,7 @@
+import { formatINR } from "../lib/currency";
+
 const FormattedPrice = ({ amount }: { amount?: number }) => {
-  const formattedAmount = new Number(amount).toLocaleString("en-US", {
-    style: "currency",
-    currency: "INR",
-    minimumFractionDigits: 2,
-  });
-  return <span>{formattedAmount}</span>;
+  return <span>{formatINR(amount)}</span>;
 };
 
 export default FormattedPrice;

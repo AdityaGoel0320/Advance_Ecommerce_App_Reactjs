@@ -4,6 +4,7 @@ import Container from "./Container.tsx";
 import { HighlightsType } from "../../type.ts";
 import { Link } from "react-router-dom";
 import { backendUrl } from "../assets/FrontendUtils.tsx"
+import FormattedPrice from "./FormattedPrice";
 
 
 
@@ -38,15 +39,15 @@ const Highlights = () => {
               color: item?.color,
             }}
           ></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent" aria-hidden="true" />
           <div
-            className="relative z-10 p-6 flex flex-col justify-between h-full"
-            style={{
-              color: item?.image?.endsWith("image-unavailable.svg") ? "rgb(var(--ink))" : item?.color,
-            }}
+            className="relative z-10 p-6 flex flex-col justify-between h-full text-white"
           >
             <div>
               <h3 className="text-2xl font-bold max-w-44">{item?.name}</h3>
-              <p className="text-base font-bold mt-4">{item?.title}</p>
+              <p className="text-base font-bold mt-4">
+                {item.startingPrice !== undefined ? <>From <FormattedPrice amount={item.startingPrice} /></> : item.title.replace(/\$/g, "INR ")}
+              </p>
             </div>
             <Link to={item?._base} className="inline-flex w-fit items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm after:absolute after:inset-0">
               {item?.buttonTitle}

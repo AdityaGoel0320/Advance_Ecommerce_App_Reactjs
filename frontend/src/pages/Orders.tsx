@@ -13,6 +13,7 @@ import Container from "../ui/Container";
 import Loading from "../ui/Loading";
 import FormattedPrice from "../ui/FormattedPrice";
 import { Link } from "react-router-dom";
+import { resolveCatalogImage } from "../lib/catalogImage";
 
 const Orders = () => {
   const { currentUser } = store();
@@ -141,7 +142,7 @@ const Orders = () => {
                                   className="h-16 w-16 flex-none sm:h-32 sm:w-32 rounded-xl bg-white border border-line hover:border-indigo-500 overflow-hidden"
                                 >
                                   <img
-                                    src={item?.images[0]}
+                                    src={resolveCatalogImage(item.images[0], item._base, import.meta.env.BASE_URL)}
                                     alt="productImage"
                                     className="h-full w-full object-cover object-center hover:scale-110 duration-300"
                                   />

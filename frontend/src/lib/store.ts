@@ -8,7 +8,7 @@ interface CartProduct extends ProductProps {
   quantity: number;
 }
 
-interface UserType {
+export interface UserType {
   firstName: string;
   lastName: string;
   email: string;
@@ -73,7 +73,17 @@ export const store = create<StoreType>()(
           const docSnap = await getDoc(docRef);
           if (auth.currentUser?.uid !== uid) return;
           if (docSnap.exists()) {
-            set({ currentUser: { ...fallbackUser, ...docSnap.data(), id: uid }, isLoading: false });
+            const profile = docSnap.data();
+            set({
+              currentUser: {
+                ...fallbackUser,
+                ...profile,
+                avatar: user.photoURL || profile.avatar || "",
+                email: user.email || profile.email || "",
+                id: uid,
+              },
+              isLoading: false,
+            });
           }
         } catch (error) {
           console.log("useUserStore error: ", error);

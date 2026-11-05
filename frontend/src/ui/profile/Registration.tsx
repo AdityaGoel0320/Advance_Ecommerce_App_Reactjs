@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import uploadImage from "../../lib/upload";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../lib/firebase";
@@ -8,6 +8,7 @@ import { MdPhotoLibrary } from "react-icons/md";
 import Label from "./Label";
 import toast from "react-hot-toast";
 import { store } from "../../lib/store";
+import { validateProfileImage } from "../../lib/profile";
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
@@ -17,13 +18,21 @@ const Registration = () => {
     file: null,
     url: "",
   });
-  const handleAvatar = (e: any) => {
-    if (e.target.files[0]) {
-      setAvatar({
-        file: e.target.files[0],
-        url: URL.createObjectURL(e.target.files[0]),
-      });
+  useEffect(() => () => { if (avatar.url) URL.revokeObjectURL(avatar.url); }, [avatar.url]);
+  const handleAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        validateProfileImage(file);
+        setAvatar({
+          file,
+          url: URL.createObjectURL(file),
+        });
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Choose a valid profile photo.");
+      }
     }
+    e.target.value = "";
   };
 
   const handleRegistration = async (e: any) => {
@@ -186,13 +195,14 @@ const Registration = () => {
                                 id="file-upload"
                                 name="file-upload"
                                 type="file"
+                                accept="image/jpeg,image/png,image/webp"
                                 className="sr-only"
                                 onChange={handleAvatar}
                               />
                             </label>
                           </div>
                           <p className="text-xs leading-5 text-subtle">
-                            PNG, JPG, GIF up to 10MB
+                            PNG, JPG, WebP up to 5 MB
                           </p>
                         </div>
                       </div>

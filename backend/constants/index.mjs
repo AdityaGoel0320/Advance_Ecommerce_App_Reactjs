@@ -116,7 +116,8 @@ export const highlightsProducts = [
   {
     _id: 3001,
     name: "New Deals at Best Prices",
-    title: "From $40.00",
+    title: "From INR 40.00",
+    startingPrice: 40,
     buttonTitle: "Browse Deals",
     image: "https://i.ibb.co/G951N5B/highlights-One.webp",
     _base: "/product",
@@ -125,7 +126,8 @@ export const highlightsProducts = [
   {
     _id: 3002,
     name: "Colorful Redmi  Note 6 Pro",
-    title: "From $40.00",
+    title: "From INR 40.00",
+    startingPrice: 40,
     buttonTitle: "Shop Cellphone",
     image: "https://i.ibb.co/bLRNKGq/highlights-Two.webp",
     _base: "/category/cellPhones",
@@ -134,7 +136,8 @@ export const highlightsProducts = [
   {
     _id: 3003,
     name: "1000 mAh Power Bank",
-    title: "From $40.00",
+    title: "From INR 40.00",
+    startingPrice: 40,
     buttonTitle: "Shop Now",
     image: "https://i.ibb.co/svWYstT/highlights-Three.webp",
     _base: "/product",

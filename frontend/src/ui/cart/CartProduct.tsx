@@ -6,6 +6,7 @@ import FormattedPrice from "../FormattedPrice";
 import { store } from "../../lib/store";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { resolveCatalogImage } from "../../lib/catalogImage";
 
 const CartProduct = ({ product }: { product: ProductProps }) => {
   const { removeFromCart } = store();
@@ -20,7 +21,7 @@ const CartProduct = ({ product }: { product: ProductProps }) => {
     <div key={product?._id} className="flex py-6 sm:py-10">
       <Link to={`/product/${product?._id}`} className="shrink-0">
         <img
-          src={product?.images[0]}
+          src={resolveCatalogImage(product.images[0], product._base, import.meta.env.BASE_URL)}
           alt="productImage"
           className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48 border border-skyText/30 hover:border-skyText duration-300"
         />

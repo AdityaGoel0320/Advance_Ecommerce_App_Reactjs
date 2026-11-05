@@ -5,6 +5,7 @@ const imagePaths: Record<string, string> = catalogImages;
 export const handleImageLoad = (event: Event) => {
   const image = event.target;
   if (!(image instanceof HTMLImageElement)) return;
+  if (image.dataset.profileAvatar === "true") return;
   const localPath = imagePaths[image.src];
   if (!localPath) return;
   image.removeAttribute("srcset");
@@ -14,6 +15,7 @@ export const handleImageLoad = (event: Event) => {
 export const handleImageError = (event: Event) => {
   const image = event.target;
   if (!(image instanceof HTMLImageElement)) return;
+  if (image.dataset.profileAvatar === "true") return;
   const localPath = imagePaths[image.src];
   if (localPath) {
     handleImageLoad(event);

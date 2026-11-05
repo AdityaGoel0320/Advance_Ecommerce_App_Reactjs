@@ -2,6 +2,7 @@ export interface HighlightsType {
   _id: number;
   _base: string;
   title: string;
+  startingPrice?: number;
   name: string;
   image: string;
   color: string;
