@@ -15,7 +15,7 @@ import {
 import FormattedPrice from "./FormattedPrice";
 interface Props {
   item: ProductProps;
-  setSearchText?: any;
+  setSearchText?: (text: string) => void;
 }
 
 const ProductCard = ({ item, setSearchText }: Props) => {
@@ -27,9 +27,11 @@ const ProductCard = ({ item, setSearchText }: Props) => {
   };
 
   const percentage =
-    ((item?.regularPrice - item?.discountedPrice) / item?.regularPrice) * 100;
+    item.regularPrice > 0
+      ? ((item.regularPrice - item.discountedPrice) / item.regularPrice) * 100
+      : 0;
 
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   function open() {
     setIsOpen(true);
@@ -39,44 +41,52 @@ const ProductCard = ({ item, setSearchText }: Props) => {
     setIsOpen(false);
   }
   return (
-    <div className="border border-gray-200 rounded-lg p-1 overflow-hidden hover:border-black duration-200 cursor-pointer">
-      <div className="w-full h-60 relative p-2 group">
-        <span
+    <article className="panel group flex h-full min-w-0 flex-col overflow-hidden p-2 transition duration-300 hover:-translate-y-1 hover:border-indigo-400/60">
+      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
+        {percentage > 0 && <button
+          type="button"
           onClick={open}
-          className="bg-black text-skyText absolute left-0 right-0 w-16 text-xs text-center py-1 rounded-md font-semibold inline-block z-10"
+          aria-label={`Save ${percentage.toFixed(0)} percent on ${item.name}`}
+          className="absolute left-2 top-2 z-10 rounded-lg bg-indigo-600 px-2.5 py-1.5 text-[10px] font-bold text-white sm:text-xs"
         >
-          save {percentage.toFixed(0)}%
-        </span>
-        <img
-          src={item?.images[0]}
-          onClick={handleProduct}
-          alt="product-image"
-          className="w-full h-full rounded-md object-cover group-hover:scale-110 duration-300"
-        />
+          -{percentage.toFixed(0)}%
+        </button>}
+        <button type="button" onClick={handleProduct} aria-label={`View ${item.name}`} className="block h-full w-full p-4 sm:p-6">
+          <img
+            src={item?.images[0]}
+            alt={item.name}
+            loading="lazy"
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          />
+        </button>
         <ProductCardSideView product={item} />
       </div>
-      <div className="flex flex-col gap-2 px-2 pb-2">
-        <h3 className=" text-xs uppercase font-semibold text-lightText">
+      <div className="flex flex-1 flex-col gap-3 px-2 pb-2 pt-4 sm:px-3">
+        <p className="line-clamp-1 text-[10px] uppercase font-semibold tracking-wider text-subtle sm:text-xs">
           {item?.overView}
-        </h3>
-        <h2 className="text-lg font-bold line-clamp-2">{item?.name}</h2>
-        <div className="text-base text-lightText flex items-center">
+        </p>
+        <h2 className="min-h-10 text-sm font-semibold leading-5 sm:min-h-12 sm:text-base sm:leading-6">
+          <button type="button" onClick={handleProduct} className="line-clamp-2 text-left hover:text-indigo-500">{item?.name}</button>
+        </h2>
+        <div className="text-sm text-amber-500 flex items-center" aria-label={`${item.reviews} reviews`}>
           <MdOutlineStarOutline />
           <MdOutlineStarOutline />
           <MdOutlineStarOutline />
           <MdOutlineStarOutline />
           <MdOutlineStarOutline />
+          <span className="ml-2 text-[10px] text-subtle sm:text-xs">({item.reviews})</span>
         </div>
 
-        <AddToCardBtn product={item} />
+        <div className="mt-auto flex flex-col gap-3"><AddToCardBtn product={item} /></div>
       </div>
       <Transition appear show={isOpen}>
         <Dialog
           as="div"
-          className="relative z-10 focus:outline-none"
+          className="relative z-[70] focus:outline-none"
           onClose={close}
         >
-          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" aria-hidden="true" />
+          <div className="fixed inset-0 z-10 w-full overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
               <TransitionChild
                 enter="ease-out duration-300"
@@ -86,29 +96,26 @@ const ProductCard = ({ item, setSearchText }: Props) => {
                 leaveFrom="opacity-100 transform-[scale(100%)]"
                 leaveTo="opacity-0 transform-[scale(95%)]"
               >
-                <DialogPanel className="w-full max-w-md rounded-xl bg-black z-50 p-6 backdrop-blur-2xl">
+                <DialogPanel className="panel w-full max-w-md p-6">
                   <DialogTitle
                     as="h3"
-                    className="text-base/7 font-medium text-white"
+                    className="text-lg font-semibold text-ink"
                   >
                     Hurry up!
                   </DialogTitle>
-                  <p className="mt-2 text-sm/6 text-white/50">
+                  <p className="mt-2 text-sm/6 text-subtle">
                     You are going to save{" "}
-                    <span className="text-skyText">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-semibold">
                       <FormattedPrice
                         amount={item?.regularPrice - item?.discountedPrice}
                       />{" "}
                     </span>
                     from this product.
                   </p>
-                  <p className="text-sm/6 text-white/50">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Sequi, consequatur?
-                  </p>
+                  <p className="text-sm/6 text-subtle">The discount is already included in the product price.</p>
                   <div className="mt-4">
                     <Button
-                      className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+                      className="primary-button"
                       onClick={close}
                     >
                       Got it, thanks!
@@ -120,7 +127,7 @@ const ProductCard = ({ item, setSearchText }: Props) => {
           </div>
         </Dialog>
       </Transition>
-    </div>
+    </article>
   );
 };
 

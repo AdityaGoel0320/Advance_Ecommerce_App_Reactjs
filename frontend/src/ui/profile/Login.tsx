@@ -56,43 +56,45 @@ const Login = ({ setLogin }: any) => {
     }
   };
   return (
-    <div className="bg-gray-950 pb-10 rounded-lg">
+    <div className="panel mx-auto max-w-lg pb-8">
       <form
         onSubmit={handleLogin}
-        className="max-w-5xl mx-auto py-10 px-10 lg:px-0"
+        className="mx-auto p-6 sm:p-8"
       >
-        <div className="border-b border-white/10 pb-5">
-          <h2 className="text-lg font-semibold uppercase leading-7 text-white">
-            Sign in
+        <div className="border-b border-line pb-5">
+          <h2 className="text-2xl font-bold text-ink">
+            Welcome back
           </h2>
-          <p className="mt-1 text-sm leading-6 text-gray-400">
+          <p className="mt-2 text-sm leading-6 text-subtle">
             Please sign in to continue
           </p>
         </div>
 
-        <div className="border-b border-white/10 pb-5">
-          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
-            <div className="col-span-2 md:col-span-1">
-              <Label title="Email address" />
+        <div className="pb-5">
+          <div className="mt-5 grid grid-cols-1 gap-5">
+            <div>
+              <Label title="Email address" htmlFor="login-email" />
               <div className="mt-2">
                 <input
                   name="email"
+                  id="login-email"
                   type="email"
                   required
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
             </div>
-            <div className="col-span-2 md:col-span-1">
-              <Label title="Password" />
+            <div>
+              <Label title="Password" htmlFor="login-password" />
               <div className="mt-2">
                 <input
                   name="password"
+                  id="login-password"
                   type="password"
                   required
                   autoComplete="current-password"
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
             </div>
@@ -108,17 +110,17 @@ const Login = ({ setLogin }: any) => {
         <button
           type="submit"
           disabled={loading}
-          className="mt-5 bg-indigo-700 w-full py-2 uppercase text-base font-bold tracking-wide text-gray-300 rounded-md hover:text-white hover:bg-indigo-600 duration-200"
+          className="primary-button mt-5 w-full"
         >
           {loading ? "Loading..." : "Sign in"}
         </button>
       </form>
 
-      <p className="text-sm leading-6 text-gray-400 text-center -mt-2">
-        Does not have an Account{" "}
+      <p className="px-6 text-sm leading-6 text-subtle text-center">
+        New to Commerce?{" "}
         <button
           onClick={() => setLogin(false)}
-          className="text-gray-200 font-semibold underline underline-offset-2 decoration-[1px] hover:text-white duration-200"
+          className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
         >
           Register
         </button>

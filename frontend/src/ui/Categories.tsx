@@ -25,33 +25,32 @@ const Categories = () => {
 
   return (
     <Container>
-      <div className="mb-10">
-        <div className="flex items-center justify-between">
+      <div className="mb-6">
+        <div className="section-heading">
           <Title text="Popular categories" />
           <Link
             to={"/category/tvAndAudio"}
-            className="font-medium relative group overflow-hidden"
+            className="text-sm font-semibold text-indigo-600 dark:text-indigo-400"
           >
-            View All Categories
-            <span className="absolute bottom-0 left-0 w-full block h-[1px] bg-gray-600 -translate-x-[100%] group-hover:translate-x-0 duration-300" />
+            Explore categories &rarr;
           </Link>
         </div>
-        <div className="w-full h-[1px] bg-gray-200 mt-3" />
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-7">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {categories?.map((item: CategoryProps) => (
           <Link
             to={`category/${item?._base}`}
             key={item?._id}
-            className="w-full h-auto relative group overflow-hidden"
+            className="panel group flex flex-col items-center gap-4 p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-indigo-400"
           >
             <img
               src={item?.image}
-              alt="cat-image"
-              className="w-full h-auto rounded-md group-hover:scale-110 duration-300"
+              alt={item.name}
+              loading="lazy"
+              className="aspect-square w-full rounded-xl bg-white object-contain p-3 transition duration-300 group-hover:scale-105"
             />
-            <div className="absolute bottom-3 w-full text-center">
-              <p className="text-sm md:text-base font-bold">{item?.name}</p>
+            <div>
+              <p className="text-sm font-semibold">{item?.name}</p>
             </div>
           </Link>
         ))}

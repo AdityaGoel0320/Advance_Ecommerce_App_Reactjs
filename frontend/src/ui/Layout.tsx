@@ -19,9 +19,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [getUserInfo]);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] primary-button">
+        Skip to content
+      </a>
       <Header />
-      {children}
+      <main id="main-content" className="flex-1 min-w-0" tabIndex={-1}>
+        <div key={pathname} className="motion-safe:animate-reveal">{children}</div>
+      </main>
       {pathname !== "/profile" && <Footer />}
       <Toaster
         position="bottom-right"
@@ -30,12 +35,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         containerClassName=""
         toastOptions={{
           style: {
-            backgroundColor: "black",
-            color: "white",
+            backgroundColor: "rgb(var(--surface))",
+            color: "rgb(var(--ink))",
+            border: "1px solid rgb(var(--line))",
           },
         }}
       />
-    </>
+    </div>
   );
 };
 

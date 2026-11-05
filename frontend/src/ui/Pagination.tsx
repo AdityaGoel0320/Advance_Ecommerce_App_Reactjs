@@ -14,7 +14,7 @@ interface PaginationProps {
 
 function Items({ currentItems }: ItemsProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+    <div className="grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
       {currentItems &&
         currentItems.map((item: ProductProps) => (
           <ProductCard key={item._id} item={item} />
@@ -51,14 +51,14 @@ const Pagination = ({ items, itemsPerPage }: PaginationProps) => {
           marginPagesDisplayed={2}
           pageCount={pageCount}
           previousLabel=""
-          pageLinkClassName="w-9 h-9 border-[1px] border-lightColor hover:border-gray-500 duration-300 flex justify-center items-center"
-          pageClassName="mr-6"
-          containerClassName="flex text-base font-semibold font-titleFont py-10"
-          activeClassName="bg-black text-white"
+          pageLinkClassName="w-11 h-11 rounded-xl border border-line hover:border-indigo-500 duration-200 flex justify-center items-center"
+          pageClassName="rounded-xl"
+          containerClassName="flex flex-wrap gap-2 text-sm font-semibold py-8"
+          activeClassName="bg-indigo-600 text-white"
         />
 
         <p className="text-base font-normal text-lightText">
-          Products from {itemStart} to {Math.min(endOffset, items.length)} of{" "}
+          Products from {items.length === 0 ? 0 : itemStart} to {Math.min(endOffset, items.length)} of{" "}
           {items.length}
         </p>
       </div>

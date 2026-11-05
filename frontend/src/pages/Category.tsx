@@ -43,11 +43,11 @@ const Category = () => {
       ) : (
         <Container>
           <h2 className="text-4xl text-center font-semibold mb-5">
-            {formatId(id!)}
+            {id ? formatId(id) : "All categories"}
           </h2>
-          <div className="flex items-start gap-10">
+          <div className="flex flex-col items-start gap-6 md:flex-row">
             <CategoryFilters id={id} />
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid w-full min-w-0 flex-1 grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {loading ? (
                 <div>
                   <p>Loading...</p>

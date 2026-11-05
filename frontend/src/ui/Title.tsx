@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 const Title = ({ text, className }: Props) => {
-  const newClassName = twMerge("text-4xl font-bold", className);
+  const newClassName = twMerge("text-2xl sm:text-3xl font-bold text-ink tracking-tight", className);
   return <h2 className={newClassName}>{text}</h2>;
 };
 

@@ -23,24 +23,26 @@ const Blog = () => {
 
   return (
     <Container>
-      <Title text="Our Blog Posts" className="text-center" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-7">
+      <Title text="Fresh inspiration" />
+      <p className="mt-2 text-sm text-subtle">Ideas and discoveries for your everyday.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-7">
         {blogsData?.map((item: BlogProps) => (
-          <div key={item?._id} className="group cursor-pointer">
+          <article key={item?._id} className="panel group overflow-hidden">
             <div className="overflow-hidden">
               <img
                 src={item?.image}
-                alt="blog-image"
-                className="w-full h-auto object-cover group-hover:scale-110 duration-300"
+                alt={item.title}
+                loading="lazy"
+                className="aspect-video w-full object-cover group-hover:scale-105 duration-500"
               />
             </div>
-            <div className="mt-5">
-              <p className="text-sm uppercase font-medium text-gray-500">
+            <div className="p-5">
+              <p className="mb-2 text-xs uppercase font-semibold tracking-wider text-indigo-500">
                 {item?._base}
               </p>
-              <p className="text-2xl font-bold line-clamp-1">{item?.title}</p>
+              <h3 className="text-lg font-semibold line-clamp-2">{item?.title}</h3>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </Container>

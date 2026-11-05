@@ -1,5 +1,17 @@
 # React + TypeScript + Vite
 
+## Storefront UI
+
+The storefront uses Tailwind CSS with shared semantic color tokens, responsive
+navigation, product grids, and accessible motion. Use the sun/moon button in the
+header to switch themes. The initial theme follows your system preference;
+an explicit choice is saved locally and synchronized between tabs.
+Animations respect `prefers-reduced-motion`. Search, account, cart, checkout,
+and orders retain their existing API and store integrations.
+
+Run `npm run build` for type checking and a production build, and `npm test`
+for regression tests. No formatting task is required.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -66,14 +66,14 @@ const Product = () => {
         <Container>
           {!!id && productData && _.isEmpty(allProducts) ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="flex items-start">
-                <div>
+              <div className="panel flex min-w-0 items-start gap-3 p-3 sm:p-5">
+                <div className="w-16 shrink-0 space-y-3 sm:w-20">
                   {productData?.images?.map((item) => (
                     <img
                       key={item}
                       src={item}
                       alt="img"
-                      className={`w-24 cursor-pointer opacity-80 hover:opacity-100 duration-300 ${
+                      className={`w-full rounded-xl bg-white object-contain p-2 cursor-pointer opacity-80 hover:opacity-100 duration-300 ${
                         imgUrl === item &&
                         "border border-gray-500 rounded-sm opacity-100"
                       }`}
@@ -81,13 +81,13 @@ const Product = () => {
                     />
                   ))}
                 </div>
-                <div>
-                  <img src={imgUrl} alt="product-image" />
+                <div className="min-w-0 flex-1 self-center rounded-xl bg-white">
+                  <img src={imgUrl} alt={productData.name} className="aspect-square w-full object-contain p-4" />
                 </div>
               </div>
               <div className="flex flex-col gap-4">
                 <h2 className="text-3xl font-bold">{productData?.name}</h2>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <PriceTag
                     regularPrice={productData?.regularPrice}
                     discountedPrice={productData?.discountedPrice}
@@ -173,16 +173,16 @@ const Product = () => {
                 </p>
 
                 <AddToCardBtn
-                  className="bg-black/80 py-3 text-base text-gray-200 hover:scale-100 hover:text-white duration-200"
+                  className="w-full py-3 text-base"
                   title="Buy now"
                   product={productData}
                 />
 
-                <div className="bg-[#f7f7f7] p-5 rounded-md flex flex-col items-center justify-center gap-2">
+                <div className="panel p-5 flex flex-col items-center justify-center gap-3 text-sm">
                   <img
                     src={productPayment}
                     alt="payment"
-                    className="w-auto object-cover"
+                    className="max-w-full rounded-lg bg-white p-2 object-contain"
                   />
                   <p className="font-semibold">
                     Guaranteed safe & secure checkout
@@ -192,13 +192,13 @@ const Product = () => {
               <ProductFeatures />
             </div>
           ) : (
-            <div className="flex items-start gap-10">
+            <div className="flex flex-col items-start gap-6 md:flex-row">
               <CategoryFilters id={id} />
-              <div>
-                <p className="text-4xl font-semibold mb-5 text-center">
-                  Products Collection
+              <div className="w-full min-w-0 flex-1">
+                <p className="text-2xl sm:text-3xl font-bold mb-6">
+                  Discover the collection
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                   {loading ? (
                     <div>
                       <p>Loading...</p>

@@ -18,7 +18,7 @@ const AddToCardBtn = ({
   showPrice?: boolean;
 }) => {
   const newClassName = twMerge(
-    "bg-[#f7f7f7] uppercase text-xs py-3 text-center rounded-full font-semibold hover:bg-black hover:text-white hover:scale-105 duration-200 cursor-pointer",
+    "primary-button w-full text-xs sm:text-sm",
     className
   );
 
@@ -96,7 +96,8 @@ const AddToCardBtn = ({
         <div className="flex self-center items-center justify-center gap-2">
           <button
             onClick={handleDeleteProduct}
-            className="bg-[#f7f7f7] text-black p-2 border-[1px] border-gray-200 hover:border-skyText rounded-full text-base hover:bg-white duration-200 cursor-pointer"
+            aria-label="Decrease quantity"
+            className="icon-button"
           >
             <FaMinus />
           </button>
@@ -105,7 +106,8 @@ const AddToCardBtn = ({
           </p>
           <button
             onClick={handleAddToCart}
-            className="bg-[#f7f7f7] text-black p-2 border-[1px] border-gray-200 hover:border-skyText rounded-full text-base hover:bg-white duration-200 cursor-pointer"
+            aria-label="Increase quantity"
+            className="icon-button"
           >
             <FaPlus />
           </button>

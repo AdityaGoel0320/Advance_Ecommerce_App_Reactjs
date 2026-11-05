@@ -81,7 +81,7 @@ const Success = () => {
   return (
     <Container>
       {loading && <Loading />}
-      <div className="min-h-[400px] flex flex-col items-center justify-center gap-y-5">
+      <div className="panel min-h-[400px] p-6 text-center flex flex-col items-center justify-center gap-y-5">
         <h2 className="text-2xl md:text-4xl font-bold text-center">
           {loading
             ? "Your order payment is processing..."
@@ -91,14 +91,14 @@ const Success = () => {
           {loading ? "Once done" : "Now"} you can view your Orders or continue
           Shopping with us
         </p>
-        <div className="flex items-center gap-x-5">
+        <div className="flex flex-wrap justify-center items-center gap-3">
           <Link to={"/orders"}>
-            <button className="bg-black text-slate-100 w-52 h-12 rounded-full text-base font-semibold hover:bg-primeColor duration-300">
+            <button className="primary-button w-52">
               View Orders
             </button>
           </Link>
           <Link to={"/"}>
-            <button className="bg-black text-slate-100 w-52 h-12 rounded-full text-base font-semibold hover:bg-primeColor duration-300">
+            <button className="primary-button w-52">
               Continue Shopping
             </button>
           </Link>

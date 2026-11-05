@@ -2,6 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --canvas: 248 250 252;
+    --surface: 255 255 255;
+    --muted: 241 245 249;
+    --ink: 15 23 42;
+    --subtle: 100 116 139;
+    --line: 226 232 240;
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --canvas: 11 17 32;
+    --surface: 19 28 46;
+    --muted: 28 39 59;
+    --ink: 241 245 249;
+    --subtle: 165 180 200;
+    --line: 47 62 84;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply m-0 bg-canvas font-sans text-ink antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+
+  button, a, input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-4 outline-accent;
+  }
+
+  input, select, textarea {
+    color-scheme: inherit;
+  }
+
+  ::selection {
+    @apply bg-indigo-500 text-white;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-line bg-surface shadow-panel;
+  }
+
+  .primary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-indigo-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .icon-button {
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink transition duration-200 hover:border-indigo-400 hover:bg-muted;
+  }
+
+  .section-heading {
+    @apply mb-6 flex flex-wrap items-center justify-between gap-4;
+  }
+
+  /* Keep legacy page utilities aligned with the shared theme. */
+  .dark .bg-white, .dark .bg-whiteText {
+    @apply bg-surface;
+  }
+  .dark .bg-gray-50, .dark .bg-gray-100,
+  .dark [class~="bg-[#f7f7f7]"], .dark [class~="bg-[#F6F6F6]"],
+  .dark [class~="bg-[#f4f4f480]"] {
+    @apply bg-muted;
+  }
+  .dark .text-black, .dark .text-darkText,
+  .dark .text-gray-900, .dark .text-gray-800 {
+    @apply text-ink;
+  }
+  .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500,
+  .dark .text-lightText {
+    @apply text-subtle;
+  }
+  .dark .border-gray-100, .dark .border-gray-200,
+  .dark .border-gray-300, .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    @apply border-line;
+  }
+  .dark .hover\:bg-white:hover {
+    @apply bg-surface;
+  }
+  .dark .hover\:text-black:hover {
+    @apply text-ink;
+  }
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

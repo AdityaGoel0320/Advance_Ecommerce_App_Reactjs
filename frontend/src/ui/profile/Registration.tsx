@@ -95,59 +95,63 @@ const Registration = () => {
       {login ? (
         <Login setLogin={setLogin} />
       ) : (
-        <div className="bg-gray-950 rounded-lg">
+        <div className="panel mx-auto max-w-2xl">
           <form
             onSubmit={handleRegistration}
-            className={`max-w-5xl mx-auto pt-10 px-10 lg:px-0`}
+            className="mx-auto p-6 sm:p-8"
           >
-            <div className="border-b border-white/10 pb-5">
-              <h2 className="text-lg font-semibold uppercase leading-7 text-white">
-                Registration Form
+            <div className="border-b border-line pb-5">
+              <h2 className="text-2xl font-bold text-ink">
+                Create your account
               </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-400">
-                You need provide required information to get register with us.
+              <p className="mt-2 text-sm leading-6 text-subtle">
+                A little about you. A better shopping experience.
               </p>
             </div>
 
-            <div className="border-b border-white/10 pb-5">
+            <div className="pb-5">
               <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
                 <div className="sm:col-span-3">
-                  <Label title="First name" />
+                  <Label title="First name" htmlFor="firstName" />
                   <div className="mt-2">
                     <input
                       type="text"
                       name="firstName"
-                      className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      id="firstName"
+                      className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
                 </div>
                 <div className="sm:col-span-3">
-                  <Label title="Last name" />
+                  <Label title="Last name" htmlFor="lastName" />
                   <div className="mt-2">
                     <input
                       type="text"
                       name="lastName"
-                      className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      id="lastName"
+                      className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
                 </div>
                 <div className="sm:col-span-4">
-                  <Label title="Email address" />
+                  <Label title="Email address" htmlFor="register-email" />
                   <div className="mt-2">
                     <input
                       name="email"
+                      id="register-email"
                       type="email"
-                      className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
                 </div>
                 <div className="sm:col-span-4">
-                  <Label title="Password" />
+                  <Label title="Password" htmlFor="register-password" />
                   <div className="mt-2">
                     <input
                       name="password"
+                      id="register-password"
                       type="password"
-                      className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      className="block h-11 w-full rounded-xl border border-line bg-muted px-4 text-sm text-ink focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
                 </div>
@@ -155,8 +159,8 @@ const Registration = () => {
                 <div className="col-span-full">
                   <div className="mt-2 flex items-center gap-x-3">
                     <div className="flex-1">
-                      <Label title="Cover photo" />
-                      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-4">
+                      <Label title="Profile photo" htmlFor="file-upload" />
+                      <div className="mt-2 flex justify-center rounded-xl border border-dashed border-line px-4 py-4">
                         <div className="text-center flex flex-col items-center">
                           <div className="w-14 h-14 border border-gray-600 rounded-full p-1">
                             {avatar?.url ? (
@@ -172,10 +176,10 @@ const Registration = () => {
                               />
                             )}
                           </div>
-                          <div className="mt-4 flex items-center mb-1 text-sm leading-6 text-gray-400">
+                          <div className="mt-4 flex items-center mb-1 text-sm leading-6 text-subtle">
                             <label
                               htmlFor="file-upload"
-                              className="relative cursor-pointer rounded-md px-2 py-1 bg-gray-900 font-semibold text-gray-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
+                              className="relative cursor-pointer rounded-lg px-3 py-2 bg-muted font-semibold text-indigo-600 dark:text-indigo-400 focus-within:ring-2 focus-within:ring-indigo-600"
                             >
                               <span>Upload a file</span>
                               <input
@@ -186,9 +190,8 @@ const Registration = () => {
                                 onChange={handleAvatar}
                               />
                             </label>
-                            <p className="pl-1">or drag and drop</p>
                           </div>
-                          <p className="text-xs leading-5 text-gray-400">
+                          <p className="text-xs leading-5 text-subtle">
                             PNG, JPG, GIF up to 10MB
                           </p>
                         </div>
@@ -208,17 +211,17 @@ const Registration = () => {
             <button
               type="submit"
               disabled={loading}
-              className="mt-5 bg-indigo-700 w-full py-2 uppercase text-base font-bold tracking-wide text-gray-300 rounded-md hover:text-white hover:bg-indigo-600 duration-200"
+              className="primary-button mt-5 w-full"
             >
-              {loading ? "Loading..." : "Send"}
+              {loading ? "Loading..." : "Create account"}
             </button>
           </form>
 
-          <p className="text-sm leading-6 text-gray-400 text-center -mt-2 py-10">
+          <p className="text-sm leading-6 text-subtle text-center px-6 pb-8">
             Already have an Account{" "}
             <button
               onClick={() => setLogin(true)}
-              className="text-gray-200 font-semibold underline underline-offset-2 decoration-[1px] hover:text-white duration-200"
+              className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
             >
               Login
             </button>

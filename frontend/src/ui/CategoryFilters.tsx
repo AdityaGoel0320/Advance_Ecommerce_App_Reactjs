@@ -23,24 +23,21 @@ const CategoryFilters = ({ id }: Props) => {
 
     fetchData();
   }, []);
-  console.log("id", id);
 
   return (
-    <div className="hidden md:inline-flex flex-col gap-6">
-      <p className="text-3xl font-bold">Filters</p>
+    <aside aria-label="Filter by category" className="panel w-full shrink-0 p-5 md:sticky md:top-44 md:w-52">
+      <p className="mb-4 text-lg font-semibold">Categories</p>
       <div>
-        <p className="text-sm uppercase font-semibold underline underline-offset-2 decoration-[1px] mb-2">
-          Select Categories
-        </p>
-        <div className="flex flex-col gap-y-2 min-w-40">
+        <div className="flex gap-2 overflow-x-auto pb-1 md:flex-col">
           {categories?.map((item: CategoryProps) => (
             <Link
               to={`/category/${item?._base}`}
               key={item?._id}
-              className={`text-base font-medium text-start underline underline-offset-2 decoration-[1px] decoration-transparent hover:decoration-gray-950 hover:text-black duration-200 ${
+              aria-current={item._base === id ? "page" : undefined}
+              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition duration-200 ${
                 item?._base === id
-                  ? "text-greenText decoration-greenText"
-                  : "text-lightText"
+                  ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+                  : "text-subtle hover:bg-muted hover:text-ink"
               }`}
             >
               {item?.name}
@@ -48,7 +45,7 @@ const CategoryFilters = ({ id }: Props) => {
           ))}
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

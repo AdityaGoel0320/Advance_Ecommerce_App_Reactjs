@@ -3,33 +3,32 @@ import { FiUser } from "react-icons/fi";
 
 const UserProfile = ({ currentUser }: any) => {
   return (
-    <div className="mx-auto max-w-7xl  sm:px-6 py-6 lg:px-8">
-      <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16">
-        <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
+    <div className="mx-auto max-w-4xl py-6">
+      <div className="panel relative isolate overflow-hidden px-6 py-12 text-center sm:px-16">
+        <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
           Welcome back, dear{" "}
           <span>
-            <span className="underline underline-offset-2 decoration-[1px] text-white font-medium">
+            <span className="text-indigo-500 font-semibold">
               {currentUser?.firstName} {currentUser?.lastName}
             </span>
           </span>
         </h2>
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-          Incididunt sint fugiat pariatur cupidatat consectetur sit cillum anim
-          id veniam aliqua proident excepteur commodo do ea.
+        <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-subtle">
+          Your favorites, orders, and next discoveries. All in one place.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4">
           {currentUser?.avatar ? (
             <img
               src={currentUser.avatar}
               alt="Your profile"
-              className="w-52 h-52 rounded-lg border border-gray-700 object-cover p-1"
+              className="w-32 h-32 rounded-2xl border border-line object-cover p-1"
             />
           ) : (
-            <FiUser aria-label="Your profile" className="w-52 h-52 text-gray-300" />
+            <FiUser aria-label="Your profile" className="w-32 h-32 rounded-2xl bg-muted p-6 text-subtle" />
           )}
           <button
             onClick={() => auth.signOut()}
-            className="rounded-md bg-white w-52 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="primary-button w-52"
           >
             Log out
           </button>
@@ -44,7 +43,7 @@ const UserProfile = ({ currentUser }: any) => {
             cy={512}
             r={512}
             fill="url(#827591b1-ce8c-4110-b064-7cb85a0b1217)"
-            fillOpacity="0.7"
+            fillOpacity="0.12"
           />
           <defs>
             <radialGradient id="827591b1-ce8c-4110-b064-7cb85a0b1217">

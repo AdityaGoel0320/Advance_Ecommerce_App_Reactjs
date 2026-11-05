@@ -50,7 +50,7 @@ const Orders = () => {
       {loading ? (
         <Loading />
       ) : orders?.length > 0 ? (
-        <div className="max-w-5xl mx-auto">
+        <div className="panel max-w-5xl mx-auto p-5 sm:p-8 break-words">
           <h2 className="text-3xl font-bold mt-1">Customer order details</h2>
           <p className="text-gray-600">
             Customer Name:{" "}
@@ -102,8 +102,8 @@ const Orders = () => {
                             </span>
                           </DisclosureButton>
                         </dt>
-                        <DisclosurePanel as="dd" className="mt-5 pr-12">
-                          <div className="flex flex-col gap-2 bg-[#f4f4f480] p-5 border border-gray-200">
+                        <DisclosurePanel as="dd" className="mt-5">
+                          <div className="flex flex-col gap-2 bg-muted rounded-xl p-4 sm:p-5 border border-line">
                             <p className="text-base font-semibold">
                               Your order{" "}
                               <span className="text-skyText">
@@ -138,7 +138,7 @@ const Orders = () => {
                               >
                                 <Link
                                   to={`/product/${item?._id}`}
-                                  className="h-20 w-20 flex-none sm:h-40 sm:w-40 rounded-lg bg-gray-100 border border-gray-300 hover:border-skyText overflow-hidden"
+                                  className="h-16 w-16 flex-none sm:h-32 sm:w-32 rounded-xl bg-white border border-line hover:border-indigo-500 overflow-hidden"
                                 >
                                   <img
                                     src={item?.images[0]}
@@ -146,7 +146,7 @@ const Orders = () => {
                                     className="h-full w-full object-cover object-center hover:scale-110 duration-300"
                                   />
                                 </Link>
-                                <div className="flex flex-auto flex-col">
+                                <div className="flex min-w-0 flex-auto flex-col">
                                   <div>
                                     <h4 className="font-medium text-gray-900">
                                       <Link to={`/product/${item?._id}`}>
@@ -158,7 +158,7 @@ const Orders = () => {
                                     </p>
                                   </div>
                                   <div className="mt-6 flex flex-1 items-end">
-                                    <dl className="flex space-x-4 divide-x divide-gray-200 text-sm sm:space-x-6">
+                                    <dl className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                                       <div className="flex">
                                         <dt className="font-medium text-gray-900">
                                           Quantity
@@ -167,7 +167,7 @@ const Orders = () => {
                                           {item?.quantity}
                                         </dd>
                                       </div>
-                                      <div className="flex pl-4 sm:pl-6">
+                                      <div className="flex">
                                         <dt className="text-black font-bold">
                                           Price
                                         </dt>
@@ -179,7 +179,7 @@ const Orders = () => {
                                           </span>
                                         </dd>
                                       </div>
-                                      <div className="flex pl-4 sm:pl-6">
+                                      <div className="flex">
                                         <dt className="font-medium text-gray-900">
                                           SubTotal
                                         </dt>
@@ -234,12 +234,12 @@ const Orders = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center">
+        <div className="panel flex flex-col gap-3 items-center px-6 py-16 text-center">
           <p className="text-2xl font-semibold">No orders yet</p>
           <p>You did not create any purchase from us</p>
           <Link
             to={"/product"}
-            className="mt-2 bg-gray-800 text-gray-100 px-6 py-2 rounded-md hover:bg-black hover:text-white duration-200"
+            className="primary-button mt-2"
           >
             Go to Shopping
           </Link>

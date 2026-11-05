@@ -17,8 +17,8 @@ function App() {
 
   return (
     <div>
-      <BannerCategories />
       <HomeBanner />
+      <BannerCategories />
       <Highlights />
       <Categories />
       <ProductList products={products} />

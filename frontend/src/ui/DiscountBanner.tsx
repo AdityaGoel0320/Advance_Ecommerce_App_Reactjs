@@ -33,30 +33,30 @@ const DiscountBanner = () => {
           <Link
             to={`/category/${link}`}
             key={title}
-            className="border-[1px] border-gray-300 px-8 py-3 rounded-full capitalize font-medium hover:bg-black hover:text-white duration-200"
+            className="rounded-xl border border-line bg-surface px-5 py-3 text-sm font-medium transition hover:border-indigo-500 hover:text-indigo-500"
           >
             {title}
           </Link>
         ))}
       </div>
-      <div className="w-full py-5 md:py-0 bg-[#F6F6F6] rounded-lg flex items-center justify-between overflow-hidden">
+      <div className="w-full p-6 sm:p-8 bg-indigo-600 text-white rounded-2xl flex items-center justify-between gap-4 overflow-hidden">
         <img
           src={discountImgOne}
           alt="discountImgOne"
           className="hidden lg:inline-flex h-36"
         />
-        <div className="flex flex-1 flex-col gap-1 items-center">
-          <div className="flex items-center justify-center gap-x-3 text-xl md:text-4xl font-bold">
+        <div className="flex flex-1 flex-col gap-3 items-center text-center">
+          <div className="flex flex-wrap items-center justify-center gap-3 text-2xl sm:text-3xl font-bold">
             <h2>Sony Headphone</h2>
             <Link
               to={"/product"}
-              className="border border-red-600 px-4 py-2 text-xl md:text-3xl text-red-600 rounded-full"
+              className="border border-white/30 bg-white/10 px-4 py-2 text-sm text-white rounded-xl hover:bg-white/20 transition"
             >
               Discount 20%
             </Link>
           </div>
-          <p className="text-sm text-gray-600 font-medium">
-            You’re out to play or stepping out to make
+          <p className="text-sm text-indigo-100 font-medium">
+            Better sound for whatever your day brings.
           </p>
         </div>
         <img
@@ -67,7 +67,7 @@ const DiscountBanner = () => {
       </div>
       <div className="mt-7">
         <p className="font-bold text-2xl">Brands We Distribute</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mt-7">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mt-7 overflow-hidden rounded-xl bg-white text-slate-900">
           <div className="border border-r-0 border-gray-300 flex items-center justify-center px-6 py-2 cursor-pointer group">
             <img
               src={brandOne}

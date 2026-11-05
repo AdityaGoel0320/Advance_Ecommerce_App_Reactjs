@@ -10,7 +10,7 @@ interface Props {
 
 const LinkButton = ({ showButton, link, className }: Props) => {
   const newClassName = twMerge(
-    "bg-darkText/80 hover:bg-darkText text-whiteText py-2.5 px-6 rounded-full flex items-center gap-2 duration-200",
+    "primary-button",
     className
   );
   return (

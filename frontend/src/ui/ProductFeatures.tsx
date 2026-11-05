@@ -81,10 +81,10 @@ function classNames(...classes: any) {
 
 const ProductFeatures = () => {
   return (
-    <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
+    <div className="panel mx-auto mt-6 w-full min-w-0 p-4 sm:p-6 md:col-span-2">
       <TabGroup>
         <div className="border-b border-gray-200">
-          <TabList className="-mb-px flex space-x-8">
+          <TabList className="-mb-px flex gap-5 overflow-x-auto">
             <Tab
               className={({ selected }) =>
                 classNames(
@@ -166,7 +166,7 @@ const ProductFeatures = () => {
                   </div>
 
                   <div
-                    className="prose prose-sm mt-2 max-w-none text-gray-500"
+                    className="prose prose-sm dark:prose-invert mt-2 max-w-none text-subtle"
                     dangerouslySetInnerHTML={{ __html: review.content }}
                   />
                 </div>
@@ -183,7 +183,7 @@ const ProductFeatures = () => {
                   <dt className="mt-5 font-medium text-gray-900">
                     {faq.question}
                   </dt>
-                  <dd className="prose prose-sm mt-2 max-w-none text-gray-500">
+                  <dd className="prose prose-sm dark:prose-invert mt-2 max-w-none text-subtle">
                     <p>{faq.answer}</p>
                   </dd>
                 </Fragment>
@@ -195,7 +195,7 @@ const ProductFeatures = () => {
             <h3 className="sr-only">License</h3>
 
             <div
-              className="prose prose-sm max-w-none text-gray-500"
+              className="prose prose-sm dark:prose-invert max-w-none text-subtle"
               dangerouslySetInnerHTML={{ __html: license.content }}
             />
           </TabPanel>

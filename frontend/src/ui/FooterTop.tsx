@@ -1,43 +1,41 @@
-import { homeIcon, saveIcon, smileIcon, tagIcon } from "../assets";
+import { FiBox, FiTag, FiTruck, FiMessageCircle } from "react-icons/fi";
 import Container from "./Container";
 
 const FooterTop = () => {
   const footers = [
     {
-      image: homeIcon,
+      icon: FiBox,
       title: "High Quality Selection",
       subTitle: "Total Product Quality Control For Peace Of Mind",
     },
     {
-      image: tagIcon,
+      icon: FiTag,
       title: "Affordable Prices",
       subTitle: "Factory Direct Prices For Maximum Savings",
     },
     {
-      image: saveIcon,
+      icon: FiTruck,
       title: "Express Shipping",
       subTitle: "Fast, Reliable Delivery From Global Warehouses",
     },
     {
-      image: smileIcon,
+      icon: FiMessageCircle,
       title: "Worry Free",
       subTitle: "Instant Access To Professional Support",
     },
   ];
   return (
-    <div className="bg-[#f7f7f7]">
-      <Container className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-        {footers?.map((item, index) => (
+    <div className="border-y border-line bg-surface">
+      <Container className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {footers?.map((item) => (
           <div
             key={item?.title}
-            className={`flex items-start gap-3 mr-6 ${
-              index !== footers.length - 1 ? "lg:border-r border-gray-300" : ""
-            }`}
+            className="flex items-start gap-3"
           >
-            <img src={item?.image} alt="image" className="w-12 h-12" />
+            <span className="rounded-xl bg-indigo-500/10 p-3 text-indigo-500"><item.icon size={22} /></span>
             <div>
-              <h3 className="text-lg font-bold">{item?.title}</h3>
-              <p className="text-sm text-gray-600 pr-6">{item?.subTitle}</p>
+              <h3 className="text-sm font-semibold">{item?.title}</h3>
+              <p className="mt-1 text-xs leading-5 text-subtle">{item?.subTitle}</p>
             </div>
           </div>
         ))}

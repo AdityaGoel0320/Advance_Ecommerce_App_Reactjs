@@ -17,21 +17,21 @@ const links = [
     icon: HiBookOpen,
   },
   {
-    name: "Shop",
-    href: "/shop",
-    description: "Maximum collections of shopping products.",
+    name: "Favorites",
+    href: "/favorite",
+    description: "Your saved products, all in one place.",
     icon: HiMiniQueueList,
   },
   {
     name: "My Account",
-    href: "/account",
+    href: "/profile",
     description: "Find your information here.",
     icon: HiBookmarkSquare,
   },
   {
-    name: "Blog",
-    href: "/blog",
-    description: "Read our latest news and articles on shopping.",
+    name: "Orders",
+    href: "/orders",
+    description: "View your purchases and order details.",
     icon: HiRss,
   },
 ];
@@ -41,8 +41,8 @@ const NotFound = () => {
 
   return (
     <Container>
-      <div className="bg-white">
-        <main className="px-6 pb-16 pt-10 sm:pb-24 lg:px-8">
+      <div className="panel break-words">
+        <section className="px-4 pb-16 pt-10 sm:px-6 sm:pb-24 lg:px-8">
           <div className="text-center">
             <p className="text-4xl font-bold leading-8 text-skyText">404</p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-darkText">
@@ -96,7 +96,7 @@ const NotFound = () => {
               <LinkButton showButton={true} link={"/"} />
             </div>
           </div>
-        </main>
+        </section>
       </div>
     </Container>
   );

@@ -1,32 +1,8 @@
 import { useEffect, useState } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
-import CustomLeftArrow from "./bannerBtn/CustomLeftArrow";
-import CustomRightArrow from "./bannerBtn/CustomRightArrow";
 import { getData } from "../lib";
 import { CategoryProps } from "../../type";
 import { backendUrl } from "../assets/FrontendUtils";
-
-const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 6,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 4,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 2,
-  },
-};
 
 const BannerCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -46,30 +22,22 @@ const BannerCategories = () => {
   }, []);
 
   return (
-    <Carousel
-      responsive={responsive}
-      infinite={true}
-      autoPlay={true}
-      transitionDuration={1000}
-      className="flex flex-row p-4 max-w-screen-xl mx-auto lg:px-0 relative"
-      customRightArrow={<CustomRightArrow />}
-      customLeftArrow={<CustomLeftArrow />}
-    >
+    <nav aria-label="Browse categories" className="scrollbar-hide mx-auto flex max-w-screen-xl gap-3 overflow-x-auto px-4 py-4 sm:px-6 lg:px-8">
       {categories.map((item: CategoryProps) => (
         <Link
           to={`category/${item?._base}`}
           key={item?._id}
-          className="flex items-center gap-x-2 p-1 border border-gray-100 mr-1 flex-1 rounded-md hover:border-skyText hover:shadow-lg"
+          className="flex shrink-0 items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-indigo-400 hover:shadow-panel"
         >
           <img
             src={item?.image}
             alt="cat-image"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-9 h-9 rounded-lg bg-white object-contain"
           />
           <p className="text-sm font-semibold">{item?.name}</p>
         </Link>
       ))}
-    </Carousel>
+    </nav>
   );
 };
 

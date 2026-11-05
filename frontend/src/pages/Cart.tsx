@@ -48,7 +48,7 @@ const Cart = () => {
             {/* Order summary */}
             <section
               aria-labelledby="summary-heading"
-              className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+              className="panel mt-8 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:sticky lg:top-44 lg:p-8"
             >
               <h2
                 id="summary-heading"
@@ -120,18 +120,15 @@ const Cart = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white h-96 flex flex-col gap-2 items-center justify-center py-5 rounded-lg border border-gray-200 drop-shadow-2xl">
+        <div className="panel flex flex-col gap-4 items-center justify-center px-6 py-16 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Shopping Cart
           </h1>
           <p className="text-lg max-w-[600px] text-center text-gray-600 tracking-wide leading-6">
-            Your cart is empty. Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Ducimus vel dolorem facilis blanditiis atque
-            explicabo assumenda quibusdam officia pariatur totam. Quia numquam
-            obcaecati asperiores, voluptas magni corrupti porro sunt ab.
+            Your cart is empty. Discover something you love and add it here when you are ready.
           </p>
           <Link to="/product">
-            <button className="bg-gray-800 text-gray-200 px-8 py-4 rounded-md hover:bg-black hover:text-white duration-200 uppercase text-sm font-semibold tracking-wide">
+            <button className="primary-button">
               go to shopping
             </button>
           </Link>

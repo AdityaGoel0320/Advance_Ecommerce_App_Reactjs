@@ -18,7 +18,7 @@ const CartProduct = ({ product }: { product: ProductProps }) => {
   };
   return (
     <div key={product?._id} className="flex py-6 sm:py-10">
-      <Link to={`/product/${product?._id}`}>
+      <Link to={`/product/${product?._id}`} className="shrink-0">
         <img
           src={product?.images[0]}
           alt="productImage"
@@ -26,7 +26,7 @@ const CartProduct = ({ product }: { product: ProductProps }) => {
         />
       </Link>
 
-      <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+      <div className="ml-4 flex min-w-0 flex-1 flex-col justify-between sm:ml-6">
         <div className="relative pr-9 sm:grid sm:grid-cols-4 sm:gap-x-6 sm:pr-0">
           <div className="flex flex-col gap-1 col-span-3">
             <h3 className="text-base font-semibold w-full">
@@ -38,7 +38,7 @@ const CartProduct = ({ product }: { product: ProductProps }) => {
             <p className="text-xs">
               Category: <span className="font-medium">{product?.category}</span>
             </p>
-            <div className="flex items-center gap-6 mt-2">
+            <div className="flex flex-wrap items-center gap-3 mt-2">
               <p className="text-base font-semibold">
                 <FormattedPrice
                   amount={product?.discountedPrice * product?.quantity}

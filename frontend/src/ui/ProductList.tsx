@@ -12,18 +12,16 @@ const ProductList = ({ products }: Props) => {
   const itemsPerPage = 12;
   return (
     <Container>
-      <div className="mb-10">
-        <div className="flex items-center justify-between">
-          <Title text="Top Sells Products" />
+      <div className="mb-6">
+        <div className="section-heading">
+          <div><p className="mb-2 text-xs font-semibold uppercase tracking-widest text-indigo-500">The edit</p><Title text="Your next favorites" /></div>
           <Link
             to={"/product"}
-            className="font-medium relative group overflow-hidden"
+            className="text-sm font-semibold text-indigo-600 dark:text-indigo-400"
           >
-            View All Products
-            <span className="absolute bottom-0 left-0 w-full block h-[1px] bg-gray-600 -translate-x-[100%] group-hover:translate-x-0 duration-300" />
+            View all products &rarr;
           </Link>
         </div>
-        <div className="w-full h-[1px] bg-gray-200 mt-3" />
       </div>
 
       <Pagination items={products} itemsPerPage={itemsPerPage} />
