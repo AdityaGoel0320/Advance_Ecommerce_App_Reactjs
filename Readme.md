@@ -94,8 +94,19 @@ are demo estimates, not a production tax calculation. No frontend Stripe
 publishable key is required. Unless `FRONTEND_URL` is set, Stripe returns to
 the requesting storefront origin.
 
-Use **Stripe test mode only**, never real card details. Standard successful
-test card: `4242 4242 4242 4242`, any future expiry, and a three-digit CVC.
+### Sample card details for testing
+
+Use **Stripe test mode only**, never real card details:
+
+| Field | Test value |
+| --- | --- |
+| Card number | `4000 0035 6000 0008` |
+| Expiry date | Any valid future month and year |
+| CVV / CVC | Any three digits other than `000` (for example, `123`) |
+| Cardholder name | Any name |
+
+If Stripe displays a test authentication prompt, complete it to finish checkout.
+Alternatively, use `4242 4242 4242 4242` for a standard successful test payment.
 See [Stripe testing documentation](https://docs.stripe.com/testing) for other scenarios.
 
 On `/success/{CHECKOUT_SESSION_ID}`, the backend verifies the session is paid
