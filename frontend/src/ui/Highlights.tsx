@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getData } from "../lib";
-import Container from "./Container";
+import { getData } from "../lib/index.ts";
+import Container from "./Container.tsx";
 import { HighlightsType } from "../../type.ts";
 import { Link } from "react-router-dom";
 import { backendUrl } from "../assets/FrontendUtils.tsx"

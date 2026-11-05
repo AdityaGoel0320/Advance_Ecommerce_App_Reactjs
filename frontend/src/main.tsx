@@ -19,7 +19,7 @@ import Success from "./pages/Success.tsx";
 import Cancel from "./pages/Cancel.tsx";
 import Orders from "./pages/Orders.tsx";
 import IdPage from "./pages/IdPage.tsx";
-import { handleImageError, handleImageLoad } from "./lib/imageFallback";
+import { handleImageError, handleImageLoad } from "./lib/imageFallback.ts";
 
 document.addEventListener("error", handleImageError, true);
 document.addEventListener("load", handleImageLoad, true);
