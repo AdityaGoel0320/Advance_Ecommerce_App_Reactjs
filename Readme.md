@@ -1,179 +1,163 @@
-# Shopp.my - One Stop place for your ecommerce needs
+# Commerce - E-commerce Demo
 
-Shopp.my is a **full-featured e-commerce web application** built using **Firebase**, **Firebase Storage**, and the **MERN stack** with **TypeScript**. It includes the following features:
+A responsive storefront built with React, TypeScript, Vite, Tailwind CSS,
+Express, Firebase, and Stripe test checkout.
 
-- **User Authentication**: Login and logout functionality using **Firebase Authentication**.
-- **Large Product Database**: Efficiently handle and display a large number of products.
-- **Responsive Design**: Fully responsive layout for seamless use on all devices.
-- **Dynamic Cart**: Add, remove, and update products in the cart dynamically.
-- **Pagination**: Efficiently paginate through large sets of products.
-- **Real-Time Filtering System**: Manage and filter products in real-time.
-- **Dynamic Routing**: Implemented dynamic routing for a seamless user experience.
-- **Payment Integration**: Complete payment processing using **Stripe**.
-- **Order Management**: Manage user orders and order history.
+[Live deployment](https://shopp-my-frontend.vercel.app/) may lag behind this repository.
 
-## Live Deployed Link
-https://shopp-my-frontend.vercel.app/
+## Features
 
-## Payment Gateway Testing
+- Responsive product grids, search, categories, pagination, cart, and favorites.
+- Persistent light/dark themes, accessible loading states, and reduced-motion support.
+- Firebase Authentication, editable profiles, and optional profile photo uploads.
+- A shared 25-product catalog with descriptive copy and illustrative INR pricing.
+- Filled and fractional stars based on each product's rating, with a numeric
+  score and review count. Ratings vary by product and remain stable across
+  renders, refreshes, search, and detail pages rather than randomizing each visit.
+  Ratings and counts are explicitly labeled demo data, not verified reviews.
+- Stripe-hosted test checkout, payment verification, retryable order saving,
+  and account-specific order history.
 
-The payment gateway is currently in testing mode. To test the payment functionality, use the following sample card details:
+## Project structure
 
-- **Card Number**: 4000 0035 6000 0008
-- **Expiry Date**: Any valid future date
-- **CVC**: Any three-digit number (other than 000)
+- `frontend/`: React storefront, public catalog images, and regression tests.
+- `backend/`: Express API for products, categories, promotions, blogs, and checkout.
+- `shared/products.json`: Canonical product data used by both applications.
+- `shared/checkoutCharges.json`: Shared delivery and tax estimates.
+- `firestore.rules` and `firebase.json`: Versioned Firestore access rules and deployment config.
 
-Feel free to try it out and ensure everything works smoothly!
+The database is Cloud Firestore, not MongoDB.
 
-## Shopp.my UI
-![qqqqqqq](https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs/assets/112582770/ab97bab1-d0d0-4adc-9290-761ada17d146)
+## Local setup
 
-
-## Product Page ScreenShot
-![Screenshot 2024-07-07 181904](https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs/assets/112582770/680d7759-6dd9-4153-8a75-6ad9b000a2d9)
-
-
-## Cart Page ScreenShot
-![Screenshot 2024-07-07 182015](https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs/assets/112582770/a5a52a42-bf3d-482c-966f-99594fcf7933)
-
-
-## Checkout Page ScreenShot
-![Screenshot 2024-07-07 182148](https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs/assets/112582770/366c7c5c-7964-45f0-bb86-041648583492)
-
-
-## Succesfull payment Page
-![Screenshot 2024-07-07 182228](https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs/assets/112582770/61b6d4f8-56ba-4f56-8f39-f33609a1cec5)
-
-
-## **Installation**
-
-To run Shopp.my locally, follow these steps:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/AdityaGoel0320/Advance_Ecommerce_App_Reactjs.git
-   ```
-
-2. Install dependencies for both frontend and backend:
-
-   ```bash
-   cd shopp-my/client
-   npm install
-   cd ../admin
-   npm install
-   ```
-
-3. Create a `.env` file in the backend directory and add the following configurations:
-
-   ```plaintext
-   PORT=your_port_number
-   STRIPE_SECRET_KEY=your_stripe_secret_key
-   ```
-
-4. Start the development server:
-
-   ```bash
-   cd ../client
-   npm run dev
-   ```
-
-5. Open your browser and navigate to `http://localhost:5173`
-
-## Repair, Verification, and Deployment
-
+Use Node.js 20.19+ or 22.12+ and npm (current Firebase CLI requirements).
 From the repository root:
 
-```bash
-npm --prefix client ci
-npm --prefix client test
-npm --prefix client run build
-npm --prefix client run dev
+```powershell
+npm --prefix frontend ci
+npm --prefix backend ci
 ```
 
-Authentication is observed across all pages. A missing or inaccessible Firestore
-profile no longer prevents a Firebase-authenticated user from signing in, and a
-product API outage no longer blocks the account page. Cart and favorites remain
-saved locally, but authentication state comes from Firebase instead of a stale
-local user record.
+Create `backend/.env` (never commit secrets):
 
-### Missing Images
+```dotenv
+PORT=8000
+STRIPE_SECRET_KEY=your_stripe_test_secret_key
+# Optional: force checkout returns to a deployed storefront.
+# FRONTEND_URL=https://your-storefront.example
+```
 
-The original ImgBB catalogue links are unavailable. All 42 image references now
-map to bundled, category-appropriate photos in `frontend/public/catalog/`,
-including products, categories, promotional banners, and blog cards.
-Licensed [Unsplash photos](https://unsplash.com/license) and locally authored
-device illustrations provide representative demo imagery, not verified
-photographs of every exact SKU. Replace the mappings
-in `frontend/src/lib/catalogImages.json` with seller-provided SKU photos before
-production use.
+Start the services in separate terminals:
 
-Run `npm --prefix frontend run images:sync` to refresh the bundled photos.
-Source photo IDs are recorded in `frontend/scripts/sync-images.mjs`. Failed
-downloads leave the existing manifest intact and report an error. Commit the
-downloaded assets with the manifest. Old cart/order placeholders recover their
-category image automatically.
+```powershell
+npm --prefix backend start
+```
 
-All monetary amounts use INR and Indian digit grouping. The shared 25-product
-demo catalog has realistic illustrative prices and unique descriptions. Cart
-and wishlist records refresh by ID; Stripe uses authoritative catalog prices
-and descriptions plus the same delivery/tax estimates shown in the cart.
-Historical paid order amounts stay unchanged.
-After Stripe returns, the app verifies the paid session with the backend and
-recovers purchased items independently of the current cart (including older
-sessions whose product names match the catalog). It saves orders in Firestore
-at `orders/{checkoutEmail}` using a transaction keyed by payment session ID,
-so refreshing or retrying cannot duplicate an order. The cart clears only
-after a successful save if it still matches the purchased items; recovering an
-older payment preserves a newer cart. Verification and Firestore failures show
-a retry action.
-Orders wait for Firebase sign-in and reload when the account changes. To recover
-a previously missing purchase, reopen its `/success/{CHECKOUT_SESSION_ID}` link
-while signed in with the checkout email. Firestore rules must permit that
-authenticated account to read and write its own order document. For production,
-use authenticated server-side fulfillment with Stripe webhooks so fulfillment
-does not depend on a customer returning to the confirmation page.
-The account dashboard supports editable names and profile photos,
-with initials when no photo exists. Uploads accept JPG, PNG, and WebP up to 5 MB
-and require the configured Firebase Storage permissions.
+```powershell
+npm --prefix frontend run dev
+```
 
-### Vercel and Firebase
+Open the Vite URL printed in the terminal, normally `http://localhost:5173`.
+The frontend API location is configured in `frontend/src/assets/FrontendUtils.tsx`.
+Firebase client configuration is in `frontend/src/lib/firebase.ts`; use your own
+project for an independent deployment. Firebase client configuration is public;
+Stripe secret keys and service credentials must remain server-side.
 
-Redeploy the changed frontend to update the live site. In Vercel, use `client`
-as the root directory, `npm run build` as the build command, and `dist` as the
-output directory. These local changes do not update an existing deployment.
+## Catalog, images, and ratings
 
-In the Firebase project used by `client/src/lib/firebase.ts`:
+All monetary amounts use INR with Indian digit grouping. Prices are illustrative
+demo amounts, not live retailer quotations. Cards show unit prices; cart totals
+multiply by quantity. Persisted carts and favorites refresh catalog fields by ID
+without losing quantities. Historical orders retain their paid prices.
 
-- Enable the Email/Password sign-in provider.
-- Add `shopp-my-frontend.vercel.app` and your other deployment domains to
-   Authentication's authorized domains. Add `localhost` for local testing if needed.
-- Verify Firestore and Storage rules allow each authenticated user to access only
-   their own permitted data. Do not make either service publicly writable.
-- Deploy the versioned Firestore rules from the repository root with
-   `npx firebase-tools deploy --only firestore:rules --project ecommerceyt-2646a`.
-   The rules allow individual profile access by Firebase UID and order access by
-   the signed-in email. Orders are append-only; listing collections, deleting
-   orders, changing historical orders, and accessing another account are denied.
-   These demo rules do not cryptographically prove payment: production orders
-   must instead be written by a trusted server after Stripe verification.
-   Storage rules are separate and are not changed by this deployment.
-- Verify the Storage bucket is active and billing requirements are satisfied if
-   profile photo uploads are enabled.
+Bundled images in `frontend/public/catalog/` include licensed
+[Unsplash photos](https://unsplash.com/license) and locally authored SVG device
+illustrations. They are representative, not verified exact-SKU photography.
+Product image frames have consistent heights; category thumbnails are circular.
+Legacy image links resolve through `frontend/src/lib/catalogImages.json`.
 
-Real account sign-in, profile writes, and payment completion require access to
-the configured Firebase and Stripe services. The regression suite uses simulated
-profile failures and does not create production accounts or charge cards.
+```powershell
+npm --prefix frontend run images:sync
+```
 
-## **Technologies Used**
+The sync script records source photo IDs, preserves the manifest on download
+failure, and reports errors. Commit refreshed assets alongside the manifest.
+Edit `shared/products.json` to change demo ratings or review counts. The same
+rating component displays exact fractional fill on cards and product details.
 
-- **Frontend**: React, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express
-- **Database**: MongoDB
-- **Authentication**: Firebase Authentication
-- **Storage**: Firebase Storage
-- **Payment Gateway**: Stripe
+## Checkout and orders
 
+Stripe uses server catalog names, descriptions, and prices, not client copies.
+Delivery and tax estimates are included in both cart and Stripe totals; these
+are demo estimates, not a production tax calculation. No frontend Stripe
+publishable key is required. Unless `FRONTEND_URL` is set, Stripe returns to
+the requesting storefront origin.
 
-## Live Deployed Link
-https://shopp-my-frontend.vercel.app/
+Use **Stripe test mode only**, never real card details. Standard successful
+test card: `4242 4242 4242 4242`, any future expiry, and a three-digit CVC.
+See [Stripe testing documentation](https://docs.stripe.com/testing) for other scenarios.
+
+On `/success/{CHECKOUT_SESSION_ID}`, the backend verifies the session is paid
+and belongs to the checkout email, then recovers purchased products from Stripe.
+The frontend saves the order at `orders/{checkoutEmail}` using a transaction
+deduplicated by payment session ID. This works even if the cart is empty.
+Only a newly saved purchase matching the current cart clears that cart.
+
+Orders wait for authentication and reload when the signed-in email changes.
+Verification, permissions, and save failures show explicit errors and retry
+actions instead of claiming success. To recover a missing order, sign in with
+the checkout email and reopen the original confirmation URL, then retry saving.
+Older sessions are recoverable when their purchased names match the catalog.
+
+## Firebase permissions
+
+In your Firebase project:
+
+1. Enable Email/Password authentication.
+2. Add localhost and deployment domains to Authentication's authorized domains.
+3. Sign in to Firebase CLI with an account authorized to deploy project rules.
+4. Deploy Firestore rules from the repository root:
+
+```powershell
+npx firebase-tools login
+npx firebase-tools deploy --only firestore:rules --project ecommerceyt-2646a
+```
+
+Rules permit individual profile access by Firebase UID and order document access
+by the authenticated email. New orders are append-only; modifying historical
+orders, deleting orders, collection listing, and other-account access are denied.
+The former time-limited test rules expired in July 2024; do not restore them or
+make the database publicly writable.
+
+Profile photos accept JPG, PNG, and WebP up to 5 MB. Configure the project's
+Firebase Storage bucket and account-only Storage permissions separately;
+deploying Firestore rules does not change Storage rules.
+
+## Verification
+
+```powershell
+npm --prefix frontend test
+npm --prefix frontend run build
+```
+
+Tests cover catalog assets, INR formatting, rating rendering, theme persistence,
+authentication, profile updates, checkout errors, payment verification, order
+deduplication, and recovery. Payment and Firestore unit tests use mocks: they do
+not charge cards, create real accounts, or prove production payment completion.
+Build performs TypeScript checking followed by a Vite production build.
+No formatting task is required.
+
+## Deployment and production limitations
+
+For Vercel, use `frontend` as the root directory, `npm run build` as the build
+command, and `dist` as the output directory. Deploy the Express backend separately,
+set its environment variables, and configure the frontend API location.
+Local changes do not automatically update deployed applications.
+
+This is a portfolio demo, not production fulfillment. Ratings, images, shipping
+messages, prices, and charges are illustrative. Firestore rules protect account
+access but do not cryptographically verify client-submitted payment data.
+Production orders must be written by a trusted server using authenticated
+requests and verified Stripe webhooks, independent of browser return navigation.
+Confirm real inventory, taxes, delivery, returns, and warranty policies before
+commercial use.

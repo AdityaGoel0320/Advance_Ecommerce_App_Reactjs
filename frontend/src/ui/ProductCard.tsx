@@ -1,4 +1,4 @@
-import { MdOutlineStarOutline } from "react-icons/md";
+import ProductRating from "./ProductRating";
 import { useNavigate } from "react-router-dom";
 import { ProductProps } from "../../type";
 import AddToCardBtn from "./AddToCardBtn";
@@ -69,14 +69,7 @@ const ProductCard = ({ item, setSearchText }: Props) => {
         <h2 className="min-h-10 text-sm font-semibold leading-5 sm:min-h-12 sm:text-base sm:leading-6">
           <button type="button" onClick={handleProduct} className="line-clamp-2 text-left hover:text-indigo-500">{item?.name}</button>
         </h2>
-        <div className="text-sm text-amber-500 flex items-center" aria-label={`${item.reviews} reviews`}>
-          <MdOutlineStarOutline />
-          <MdOutlineStarOutline />
-          <MdOutlineStarOutline />
-          <MdOutlineStarOutline />
-          <MdOutlineStarOutline />
-          <span className="ml-2 text-[10px] text-subtle sm:text-xs">({item.reviews})</span>
-        </div>
+        <ProductRating rating={item.rating} reviews={item.reviews} />
 
         <div className="mt-auto flex flex-col gap-3"><AddToCardBtn product={item} /></div>
       </div>

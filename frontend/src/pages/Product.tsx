@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { MdOutlineStarOutline } from "react-icons/md";
+import ProductRating from "../ui/ProductRating";
 import { useParams } from "react-router-dom";
 import { ProductProps } from "../../type";
 import { productPayment } from "../assets";
@@ -93,16 +93,7 @@ const Product = () => {
                     discountedPrice={productData?.discountedPrice}
                     className="text-xl"
                   />
-                  <div className="flex items-center gap-1">
-                    <div className="text-base text-lightText flex items-center">
-                      <MdOutlineStarOutline />
-                      <MdOutlineStarOutline />
-                      <MdOutlineStarOutline />
-                      <MdOutlineStarOutline />
-                      <MdOutlineStarOutline />
-                    </div>
-                    <p className="text-base font-semibold">{`(${productData?.reviews} reviews)`}</p>
-                  </div>
+                  <ProductRating rating={productData.rating} reviews={productData.reviews} />
                 </div>
                 <p className={`text-sm font-medium ${productData.isStock ? "text-emerald-600 dark:text-emerald-400" : "text-subtle"}`}>
                   {productData.isStock ? "In stock and available to order" : "Currently unavailable"}
