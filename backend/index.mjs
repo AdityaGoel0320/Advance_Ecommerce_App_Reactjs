@@ -17,12 +17,12 @@ const __dirname = path.dirname(__filename);
 
 // Dynamic routing
 
-const routeFiles = readdirSync("./routes");
-routeFiles.map(async (file) => {
+const routeFiles = readdirSync(path.join(__dirname, "routes")).filter((file) => file.endsWith(".mjs"));
+for (const file of routeFiles) {
   const routeModule = await import(`./routes/${file}`);
 
   app.use("/", routeModule.default);
-});
+}
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

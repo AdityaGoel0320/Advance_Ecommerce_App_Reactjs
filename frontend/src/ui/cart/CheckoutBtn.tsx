@@ -1,7 +1,10 @@
 import { ProductProps } from "../../../type";
 import { backendUrl } from "../../assets/FrontendUtils";
 import { store } from "../../lib/store";
-import { loadStripe } from "@stripe/stripe-js";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { getCheckoutUrl } from "../../lib/checkout";
 
 interface Props {
   products: ProductProps[];
@@ -10,28 +13,32 @@ interface Props {
 
 const CheckoutBtn = ({ products, totalAmt }: Props) => {
   const { currentUser } = store();
-  const publicKey = "pk_test_51PAB7OSHK6BpruzqY5A4kNIw4sBvcfXvFg2FsxZaoV8mwz44lacafqkenQMiqYaV5aTNlALKJ1PYNWK5xis9Xm0v00fn9lipwy";
-  const stripePromise = loadStripe(publicKey);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const inFlight = useRef(false);
+  const canCheckout = !!currentUser?.email && products.length > 0 && Number.isFinite(totalAmt) && totalAmt > 0;
   const handleCheckout = async () => {
-    const stripe = await stripePromise;
-
-    const response = await fetch(`${backendUrl}/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: products,
-        totalAmt,
-        email: currentUser?.email,
-      }),
-    });
-    const checkoutSession = await response?.json();
-    const result: any = await stripe?.redirectToCheckout({
-      sessionId: checkoutSession.id,
-    });
-    if (result.error) {
-      alert(result?.error.message);
+    if (inFlight.current) return;
+    if (!canCheckout || !currentUser?.email) {
+      toast.error("Sign in and add products to your cart before checking out.");
+      return;
+    }
+    inFlight.current = true;
+    setPending(true);
+    setError("");
+    try {
+      const url = await getCheckoutUrl(`${backendUrl}/checkout`, products, currentUser.email);
+      window.location.assign(url);
+    } catch (checkoutError) {
+      console.error("Unable to start checkout", checkoutError);
+      const message = checkoutError instanceof TypeError
+        ? "Unable to reach checkout. Check your connection and make sure the backend is running."
+        : checkoutError instanceof Error ? checkoutError.message : "Checkout failed. Please try again.";
+      setError(message);
+      toast.error(message);
+    } finally {
+      inFlight.current = false;
+      setPending(false);
     }
   };
 
@@ -40,16 +47,17 @@ const CheckoutBtn = ({ products, totalAmt }: Props) => {
       {currentUser ? (
         <button
           onClick={handleCheckout}
-          type="submit"
-          className="w-full rounded-md border border-transparent bg-gray-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-skyText focus:ring-offset-2 focus:ring-offset-gray-50 duration-200"
+          type="button"
+          disabled={!canCheckout || pending}
+          aria-busy={pending}
+          className="primary-button w-full"
         >
-          Checkout
+          {pending ? "Opening secure checkout..." : "Checkout"}
         </button>
       ) : (
-        <p className="w-full text-base text-white text-center rounded-md border border-transparent bg-gray-500 px-4 py-3 cursor-not-allowed">
-          Checkout
-        </p>
+        <Link to="/profile" className="primary-button w-full">Sign in to checkout</Link>
       )}
+      {error && <p role="alert" className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 };

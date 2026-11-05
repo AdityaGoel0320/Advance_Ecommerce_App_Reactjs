@@ -9,6 +9,13 @@ an explicit choice is saved locally and synchronized between tabs.
 Animations respect `prefers-reduced-motion`. Search, account, cart, checkout,
 and orders retain their existing API and store integrations.
 
+Checkout redirects to the Stripe-hosted URL returned by the backend; no
+frontend Stripe publishable key is required. Configure `STRIPE_SECRET_KEY` in
+the backend environment. Optionally set `FRONTEND_URL` to your deployed
+storefront origin; otherwise checkout returns to the requesting storefront
+(including localhost). Errors appear below Checkout, and duplicate clicks are
+blocked while a session is being created.
+
 Run `npm run build` for type checking and a production build, and `npm test`
 for regression tests. No formatting task is required.
 
