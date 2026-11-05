@@ -122,7 +122,7 @@ const Header = () => {
               {categories.map((item) => (
                 <MenuItem key={item._id}>
                   <Link to={`/category/${item._base}`} className="flex items-center gap-3 rounded-lg px-3 py-2.5 data-[focus]:bg-muted">
-                    <img src={item.image} alt="" className="h-8 w-8 rounded-lg bg-white object-contain" />
+                    <img src={item.image} alt="" className="h-9 w-9 shrink-0 rounded-full bg-muted object-cover" />
                     {item.name}
                   </Link>
                 </MenuItem>

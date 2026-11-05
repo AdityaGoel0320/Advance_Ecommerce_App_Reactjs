@@ -20,26 +20,85 @@ test("INR formatting uses Indian grouping for every monetary amount", () => {
   assert.equal(formatINR(), "\u20b90.00");
 });
 
-test("all catalog image references have bundled, non-placeholder JPEG photos", async () => {
+test("all product, category and legacy image references have bundled matching assets", async () => {
   const catalog = await import("../../backend/constants/index.mjs");
   const manifest = require("../src/lib/catalogImages.json");
-  const originals = [];
+  const sources = Object.values(manifest);
   const collect = (value) => {
-    if (typeof value === "string" && value.startsWith("https://i.ibb.co/")) originals.push(value);
+    if (typeof value === "string" && value.startsWith("/catalog/")) sources.push(value);
     else if (Array.isArray(value)) value.forEach(collect);
     else if (value && typeof value === "object") Object.values(value).forEach(collect);
   };
   collect(catalog);
-  assert.ok(originals.length > 40);
-  for (const original of originals) {
-    const local = manifest[original];
-    assert.ok(local?.startsWith("/catalog/"), `Missing photo for ${original}`);
+  assert.equal(Object.keys(manifest).length, 42);
+  for (const local of sources) {
+    assert.ok(local?.startsWith("/catalog/"));
     const bytes = readFileSync(path.join(__dirname, "../public", local));
-    assert.ok(bytes.length > 5000, `${local} is unexpectedly small`);
-    assert.equal(bytes[0], 0xff);
-    assert.equal(bytes[1], 0xd8);
+    if (local.endsWith(".svg")) {
+      assert.match(bytes.toString(), /viewBox="0 0 600 600"/);
+    } else {
+      assert.ok(bytes.length > 5000, `${local} is unexpectedly small`);
+      assert.equal(bytes[0], 0xff);
+      assert.equal(bytes[1], 0xd8);
+    }
   }
   assert.ok(catalog.highlightsProducts.every((item) => !item.title.includes("$")));
+});
+
+test("every product has unique realistic copy, sensible INR pricing and a matching image", async () => {
+  const { products, categories, highlightsProducts } = await import("../../backend/constants/index.mjs");
+  assert.equal(products.length, 25);
+  assert.equal(new Set(products.map((item) => item._id)).size, 25);
+  assert.equal(new Set(products.map((item) => item.description)).size, 25);
+  for (const item of products) {
+    assert.doesNotMatch(JSON.stringify(item), /lorem|ipsum|Samsung|Redmi|Xiaomi/i);
+    assert.ok(item.description.length > 100);
+    assert.ok(item.discountedPrice >= 699);
+    assert.ok(item.regularPrice > item.discountedPrice);
+    assert.equal(item.images.length, 1);
+    if (item._base === "cellPhones") assert.ok(item.discountedPrice >= 10000);
+    if (item._base === "computersAndLaptop") assert.ok(item.discountedPrice >= 30000);
+    if (item._base === "robotClean") assert.ok(item.discountedPrice >= 20000);
+    if (item._base === "tvBox") assert.match(item.images[0], /tv-(box|stick)\.svg/);
+  }
+  assert.match(categories.find((item) => item._base === "tvBox").image, /tv-box\.svg/);
+  for (const highlight of highlightsProducts) {
+    const base = highlight._base.split("/").pop();
+    const minimum = Math.min(...products.filter((item) => item._base === base).map((item) => item.discountedPrice));
+    assert.equal(highlight.startingPrice, minimum);
+  }
+});
+
+test("shared catalog refresh replaces obsolete data and retains cart quantities", () => {
+  const api = load("../src/lib/catalog.ts", (name) =>
+    name === "../../../shared/products.json" ? { default: require("../../shared/products.json") } : require(name));
+  const result = api.refreshCatalogItems([
+    { _id: 2010, quantity: 4, discountedPrice: 40, description: "Lorem ipsum" },
+    { _id: 2013, quantity: 2, images: ["/catalog/speaker.jpg"] },
+  ]);
+  assert.equal(result[0].discountedPrice, 14999);
+  assert.equal(result[0].quantity, 4);
+  assert.doesNotMatch(result[0].description, /lorem/i);
+  assert.equal(result[1].images[0], "/catalog/tv-box.svg");
+});
+
+test("loader is an accessible in-flow status, not a page-covering overlay", () => {
+  const source = readFileSync(path.join(__dirname, "../src/ui/Loading.tsx"), "utf8");
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX },
+  }).outputText;
+  const module = { exports: {} };
+  new vm.Script(compiled).runInNewContext({
+    exports: module.exports,
+    require: () => ({ jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) }),
+  });
+  for (const compact of [false, true]) {
+    const loader = module.exports.default({ compact, label: "Getting your products..." });
+    assert.equal(loader.props.role, "status");
+    assert.equal(loader.props["aria-live"], "polite");
+    assert.doesNotMatch(loader.props.className, /absolute|fixed|bg-black|h-full/);
+  }
+  assert.match(source, /motion-safe:animate-spin/);
 });
 
 test("legacy cart and order placeholders recover category images without changing real photos", () => {

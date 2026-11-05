@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { FaRegEye } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { MdOutlineStarOutline } from "react-icons/md";
 import { useParams } from "react-router-dom";
@@ -22,7 +21,7 @@ const Product = () => {
   const [allProducts, setAllProducts] = useState<ProductProps[]>([]);
   const [imgUrl, setImgUrl] = useState("");
   const [color, setColor] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   const endpoint = id
@@ -86,7 +85,8 @@ const Product = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h2 className="text-3xl font-bold">{productData?.name}</h2>
+                <h1 className="text-3xl font-bold">{productData?.name}</h1>
+                <p className="text-sm leading-7 text-subtle">{productData.description}</p>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <PriceTag
                     regularPrice={productData?.regularPrice}
@@ -104,13 +104,8 @@ const Product = () => {
                     <p className="text-base font-semibold">{`(${productData?.reviews} reviews)`}</p>
                   </div>
                 </div>
-                <p className="flex items-center">
-                  <FaRegEye className="mr-1" />{" "}
-                  <span className="font-semibold mr-1">
-                    {productData?.reviews}
-                  </span>
-                  {"  "}
-                  people are viewing this right now
+                <p className={`text-sm font-medium ${productData.isStock ? "text-emerald-600 dark:text-emerald-400" : "text-subtle"}`}>
+                  {productData.isStock ? "In stock and available to order" : "Currently unavailable"}
                 </p>
                 <p>
                   You are saving{" "}
@@ -189,7 +184,7 @@ const Product = () => {
                   </p>
                 </div>
               </div>
-              <ProductFeatures />
+              <ProductFeatures product={productData} />
             </div>
           ) : (
             <div className="flex flex-col items-start gap-6 md:flex-row">

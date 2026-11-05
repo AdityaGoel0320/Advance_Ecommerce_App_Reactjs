@@ -112,7 +112,7 @@ const Login = ({ setLogin }: any) => {
           disabled={loading}
           className="primary-button mt-5 w-full"
         >
-          {loading ? "Loading..." : "Sign in"}
+          {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
 
@@ -125,7 +125,7 @@ const Login = ({ setLogin }: any) => {
           Register
         </button>
       </p>
-      {loading && <Loading />}
+      {loading && <Loading compact label="Signing you in securely..." />}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { backendUrl } from "../assets/FrontendUtils";
 import catalogImages from "./catalogImages.json";
+import { refreshCatalogProduct } from "./catalog";
 
 const imagePaths: Record<string, string> = catalogImages;
 
@@ -11,7 +12,8 @@ const localizeImages = (value: any): any => {
   }
   if (Array.isArray(value)) return value.map(localizeImages);
   if (value && typeof value === "object") {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, localizeImages(item)]));
+    const current = "discountedPrice" in value && "_id" in value ? refreshCatalogProduct(value) : value;
+    return Object.fromEntries(Object.entries(current).map(([key, item]) => [key, localizeImages(item)]));
   }
   return value;
 };

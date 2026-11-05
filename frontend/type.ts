@@ -27,11 +27,11 @@ export interface ProductProps {
   name: string;
   isStock: boolean;
   isNew: boolean;
-  images: [string];
+  images: string[];
   discountedPrice: number;
   regularPrice: number;
   description: string;
-  colors: [string];
+  colors: string[];
   category: string;
   brand: string;
 }

@@ -24,6 +24,10 @@ const AddToCardBtn = ({
 
   const { addToCart, cartProduct, decreaseQuantity } = store();
   const handleAddToCart = () => {
+    if (product && !product.isStock) {
+      toast.error("This product is currently unavailable.");
+      return;
+    }
     if (product) {
       addToCart(product);
       toast.success(`${product?.name.substring(0, 10)} added successfully!`);
@@ -62,33 +66,13 @@ const AddToCardBtn = ({
     setExistingProduct(availableItem || null);
   }, [product, cartProduct]);
 
-  const getRegularPrice = () => {
-    if (existingProduct) {
-      if (product) {
-        return product?.regularPrice * existingProduct?.quantity;
-      }
-    } else {
-      return product?.regularPrice;
-    }
-  };
-
-  const getDiscountedPrice = () => {
-    if (existingProduct) {
-      if (product) {
-        return product?.discountedPrice * existingProduct?.quantity;
-      }
-    } else {
-      return product?.discountedPrice;
-    }
-  };
-
   return (
     <>
       {showPrice && (
         <div>
           <PriceTag
-            regularPrice={getRegularPrice()}
-            discountedPrice={getDiscountedPrice()}
+            regularPrice={product?.regularPrice}
+            discountedPrice={product?.discountedPrice}
           />
         </div>
       )}
@@ -106,6 +90,7 @@ const AddToCardBtn = ({
           </p>
           <button
             onClick={handleAddToCart}
+            disabled={!product?.isStock}
             aria-label="Increase quantity"
             className="icon-button"
           >
@@ -113,8 +98,8 @@ const AddToCardBtn = ({
           </button>
         </div>
       ) : (
-        <button className={newClassName} onClick={handleAddToCart}>
-          {title ? title : "Add to cart"}
+        <button className={newClassName} onClick={handleAddToCart} disabled={!product?.isStock}>
+          {!product?.isStock ? "Currently unavailable" : title ? title : "Add to cart"}
         </button>
       )}
     </>

@@ -21,17 +21,31 @@ for regression tests. No formatting task is required.
 
 ## Catalog images, currency, and accounts
 
-All prices use Indian Rupees with `en-IN` grouping, including promotional
-starting prices and Stripe checkout. Existing numeric prices are preserved,
-not converted from another currency.
+All prices use Indian Rupees with `en-IN` grouping. The 25-product demo catalog
+in `../shared/products.json` provides unique descriptions, sensible illustrative
+INR prices, and category-matched images. It is shared by frontend and backend.
+Persisted cart and wishlist items refresh by product ID while preserving
+quantities. Historical paid order totals are not rewritten.
+
+Stripe uses catalog names, descriptions and prices, never client-supplied
+copies. Delivery and tax estimates come from `../shared/checkoutCharges.json`
+and are included in the Stripe total. Promotional starting prices are computed
+from the corresponding catalog category. Product cards show unit prices even
+when more than one item is in the cart.
 
 Catalog photos are bundled under `public/catalog`, so the storefront no longer
 depends on the retired image links. Run `npm run images:sync` to refresh them.
-The script maps all catalog image references to licensed, category-appropriate
+The script keeps legacy image mappings current with licensed, category-appropriate
 [Unsplash photos](https://unsplash.com/license), with source photo IDs recorded
-in the script. These are representative demo photos, not verified photographs
-of every exact SKU; replace them with seller-provided SKU images for production.
+in the script. TV boxes, streaming sticks, controllers, writing pads, glue guns
+and other distinct devices use locally authored square SVG illustrations
+instead of unrelated photos. These are demo images, not verified manufacturer
+photos. Products use equal-height image frames; category thumbnails are circular.
 Legacy cart and order placeholders also resolve to their category photos.
+
+Loading indicators render within their content area rather than obscuring the
+whole page. Sign-in uses a compact status indicator and disabled submit button.
+All spinner motion respects reduced-motion preferences.
 
 The account page includes editable names, profile photo upload, initials when
 no photo is available, cart/wishlist summaries, order links, and account status.

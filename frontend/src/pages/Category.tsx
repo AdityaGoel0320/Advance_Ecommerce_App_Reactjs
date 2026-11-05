@@ -10,7 +10,7 @@ import { backendUrl } from "../assets/FrontendUtils";
 
 const Category = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {

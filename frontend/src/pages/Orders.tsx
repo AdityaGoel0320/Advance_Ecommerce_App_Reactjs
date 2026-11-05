@@ -64,9 +64,7 @@ const Orders = () => {
             <span className="text-black font-semibold">{orders?.length}</span>
           </p>
           <p className="text-sm max-w-[600px] tracking-wide text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem iste
-            nostrum voluptate, accusantium cum officia aliquid? Laboriosam
-            dolores neque est?
+            Review your purchased items, quantities and payment details below.
           </p>
           <div className="flex flex-col gap-3">
             <div className="space-y-6 divide-y divide-gray-900/10">

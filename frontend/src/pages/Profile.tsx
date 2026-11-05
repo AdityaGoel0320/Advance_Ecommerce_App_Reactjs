@@ -8,13 +8,12 @@ const Profile = () => {
   const { currentUser, isLoading } = store();
   return (
     <Container>
-      {currentUser ? (
+      {isLoading ? <Loading label="Preparing your account..." /> : currentUser ? (
         <UserProfile currentUser={currentUser} />
       ) : (
         <Registration />
       )}
       {/* <Registration /> */}
-      {isLoading && <Loading />}
     </Container>
   );
 };

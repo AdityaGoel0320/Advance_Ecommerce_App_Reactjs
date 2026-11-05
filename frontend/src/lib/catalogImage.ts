@@ -3,15 +3,15 @@ import catalogImages from "./catalogImages.json";
 const images: Record<string, string> = catalogImages;
 const categoryImages: Record<string, string> = {
   tvandaudio: "speaker",
-  tvbox: "speaker",
+  tvbox: "tv-box.svg",
   powertools: "tools",
   headphones: "headphones",
   cellphones: "phone",
   smartwatches: "watch",
-  gameandvideo: "gaming",
+  gameandvideo: "controller.svg",
   robotclean: "vacuum",
   sportwatches: "watch",
-  tablets: "tablet",
+  tablets: "writing-tablet.svg",
   computersandlaptop: "laptop",
   camerasandphotos: "camera",
 };
@@ -21,7 +21,7 @@ export function resolveCatalogImage(source: string | undefined, category = "", b
   if (local) return `${baseUrl}${local.slice(1)}`;
   if (!source || source.endsWith("image-unavailable.svg")) {
     const group = categoryImages[category.toLowerCase().replace(/&/g, "and").replace(/[^a-z]/g, "")];
-    if (group) return `${baseUrl}catalog/${group}.jpg`;
+    if (group) return `${baseUrl}catalog/${group.includes(".") ? group : `${group}.jpg`}`;
   }
   return source || `${baseUrl}image-unavailable.svg`;
 }

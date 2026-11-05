@@ -6,11 +6,12 @@ import FormattedPrice from "../ui/FormattedPrice";
 import { useEffect, useState } from "react";
 import CheckoutBtn from "../ui/cart/CheckoutBtn";
 import { Link } from "react-router-dom";
+import charges from "../../../shared/checkoutCharges.json";
 
 const Cart = () => {
   const [totalAmt, setTotalAmt] = useState({ regular: 0, discounted: 0 });
-  const shippingAmt = 25;
-  const taxAmt = 15;
+  const shippingAmt = charges.shipping;
+  const taxAmt = charges.tax;
   const { cartProduct } = store();
 
   useEffect(() => {

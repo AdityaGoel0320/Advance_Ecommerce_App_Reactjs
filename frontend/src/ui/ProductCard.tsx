@@ -43,7 +43,7 @@ const ProductCard = ({ item, setSearchText }: Props) => {
   }
   return (
     <article className="panel group flex h-full min-w-0 flex-col overflow-hidden p-2 transition duration-300 hover:-translate-y-1 hover:border-indigo-400/60">
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
+      <div className="relative h-52 w-full shrink-0 overflow-hidden rounded-xl bg-muted sm:h-56">
         {percentage > 0 && <button
           type="button"
           onClick={open}
@@ -52,12 +52,12 @@ const ProductCard = ({ item, setSearchText }: Props) => {
         >
           -{percentage.toFixed(0)}%
         </button>}
-        <button type="button" onClick={handleProduct} aria-label={`View ${item.name}`} className="block h-full w-full p-4 sm:p-6">
+        <button type="button" onClick={handleProduct} aria-label={`View ${item.name}`} className="block h-full w-full">
           <img
             src={resolveCatalogImage(item.images[0], item._base, import.meta.env.BASE_URL)}
             alt={item.name}
             loading="lazy"
-            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className="block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </button>
         <ProductCardSideView product={item} />

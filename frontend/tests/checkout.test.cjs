@@ -26,6 +26,10 @@ function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }) {
     require: (name) => {
       if (name === "express") return { Router: () => ({ post: (_path, callback) => { handler = callback; } }) };
       if (name === "stripe") return { default: class { checkout = { sessions: { create: createSession } }; } };
+      if (name === "../constants/index.mjs") return {
+        products: require("../../shared/products.json"),
+        checkoutCharges: require("../../shared/checkoutCharges.json"),
+      };
       throw new Error(`Unexpected import: ${name}`);
     },
   });
@@ -40,7 +44,7 @@ function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }) {
   };
 }
 
-const item = { name: "Headphones", description: "Wireless audio", quantity: 2, discountedPrice: 12.34, images: ["/image-unavailable.svg"] };
+const item = { _id: 2007, name: "Old headphones", description: "Lorem ipsum", quantity: 2, discountedPrice: 12.34, images: ["/image-unavailable.svg"], isStock: true };
 
 test("backend returns Stripe URL, uses current storefront and omits local image URLs", async () => {
   let payload;
@@ -53,9 +57,12 @@ test("backend returns Stripe URL, uses current storefront and omits local image 
   assert.equal(result.data.url, "https://checkout.stripe.com/c/pay/test");
   assert.equal(payload.success_url, "http://127.0.0.1:5173/success/{CHECKOUT_SESSION_ID}");
   assert.equal(payload.cancel_url, "http://127.0.0.1:5173/cancel");
-  assert.equal(payload.line_items[0].price_data.unit_amount, 1234);
+  assert.equal(payload.line_items[0].price_data.unit_amount, 179900);
   assert.equal(payload.line_items[0].quantity, 2);
   assert.equal("images" in payload.line_items[0].price_data.product_data, false);
+  assert.equal(payload.line_items[0].price_data.product_data.name, "Foldable Wireless Over-Ear Headphones");
+  assert.doesNotMatch(payload.line_items[0].price_data.product_data.description, /lorem/i);
+  assert.equal(payload.line_items.reduce((total, line) => total + line.quantity * line.price_data.unit_amount, 0), (1799 * 2 + 25 + 15) * 100);
 });
 
 test("configured storefront takes precedence over request origin", async () => {
@@ -68,6 +75,28 @@ test("configured storefront takes precedence over request origin", async () => {
   assert.equal(payload.cancel_url, "https://store.example/cancel");
 });
 
+test("Stripe receives authoritative details and INR prices for every available product", async () => {
+  const catalog = require("../../shared/products.json").filter((product) => product.isStock);
+  let payload;
+  const route = loadRoute(async (data) => {
+    payload = data;
+    return { id: "cs_test", url: "https://checkout.stripe.com/c/pay/test" };
+  });
+  const result = await route({
+    items: catalog.map((product) => ({ _id: product._id, quantity: 1, name: "Old item", description: "Lorem ipsum", discountedPrice: 40 })),
+    email: "test@example.com",
+  });
+  assert.equal(result.statusCode, 200);
+  catalog.forEach((product, index) => {
+    const price = payload.line_items[index].price_data;
+    assert.equal(price.currency, "inr");
+    assert.equal(price.unit_amount, product.discountedPrice * 100);
+    assert.equal(price.product_data.name, product.name);
+    assert.equal(price.product_data.description, product.description);
+    assert.doesNotMatch(price.product_data.description, /lorem|ipsum/i);
+  });
+});
+
 test("invalid cart, email and origin are rejected without calling Stripe", async () => {
   let calls = 0;
   const route = loadRoute(async () => { calls++; });
@@ -75,7 +104,9 @@ test("invalid cart, email and origin are rejected without calling Stripe", async
   for (const body of [
     { ...base, items: [] },
     { ...base, items: [{ ...item, quantity: 0 }] },
-    { ...base, items: [{ ...item, discountedPrice: -1 }] },
+    { ...base, items: [{ ...item, _id: 9999 }] },
+    { ...base, items: [{ ...item, _id: 2004 }] },
+    { ...base, items: [{ ...item, quantity: 100 }] },
     { ...base, email: "" },
     { ...base, origin: "javascript:alert(1)" },
   ]) {

@@ -16,7 +16,8 @@ const CheckoutBtn = ({ products, totalAmt }: Props) => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const inFlight = useRef(false);
-  const canCheckout = !!currentUser?.email && products.length > 0 && Number.isFinite(totalAmt) && totalAmt > 0;
+  const canCheckout = !!currentUser?.email && products.length > 0 &&
+    products.every((product) => product.isStock) && Number.isFinite(totalAmt) && totalAmt > 0;
   const handleCheckout = async () => {
     if (inFlight.current) return;
     if (!canCheckout || !currentUser?.email) {

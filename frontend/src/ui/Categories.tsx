@@ -47,7 +47,7 @@ const Categories = () => {
               src={item?.image}
               alt={item.name}
               loading="lazy"
-              className="aspect-square w-full rounded-xl bg-white object-contain p-3 transition duration-300 group-hover:scale-105"
+              className="h-24 w-24 shrink-0 rounded-full border border-line bg-muted object-cover transition duration-300 group-hover:scale-105 sm:h-28 sm:w-28"
             />
             <div>
               <p className="text-sm font-semibold">{item?.name}</p>

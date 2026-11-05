@@ -102,8 +102,9 @@ local user record.
 The original ImgBB catalogue links are unavailable. All 42 image references now
 map to bundled, category-appropriate photos in `frontend/public/catalog/`,
 including products, categories, promotional banners, and blog cards.
-These licensed [Unsplash photos](https://unsplash.com/license) are representative
-demo imagery, not verified photographs of every exact SKU. Replace the mappings
+Licensed [Unsplash photos](https://unsplash.com/license) and locally authored
+device illustrations provide representative demo imagery, not verified
+photographs of every exact SKU. Replace the mappings
 in `frontend/src/lib/catalogImages.json` with seller-provided SKU photos before
 production use.
 
@@ -113,8 +114,12 @@ downloads leave the existing manifest intact and report an error. Commit the
 downloaded assets with the manifest. Old cart/order placeholders recover their
 category image automatically.
 
-All monetary amounts use INR and Indian digit grouping; existing numeric prices
-are preserved. The account dashboard supports editable names and profile photos,
+All monetary amounts use INR and Indian digit grouping. The shared 25-product
+demo catalog has realistic illustrative prices and unique descriptions. Cart
+and wishlist records refresh by ID; Stripe uses authoritative catalog prices
+and descriptions plus the same delivery/tax estimates shown in the cart.
+Historical paid order amounts stay unchanged.
+The account dashboard supports editable names and profile photos,
 with initials when no photo exists. Uploads accept JPG, PNG, and WebP up to 5 MB
 and require the configured Firebase Storage permissions.
 

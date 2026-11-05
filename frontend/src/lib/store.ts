@@ -3,6 +3,7 @@ import { ProductProps } from "../../type";
 import { persist } from "zustand/middleware";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
+import { refreshCatalogItems } from "./catalog";
 
 interface CartProduct extends ProductProps {
   quantity: number;
@@ -184,8 +185,8 @@ export const store = create<StoreType>()(
         const saved = persistedState as Partial<StoreType> | undefined;
         return {
           ...currentState,
-          cartProduct: saved?.cartProduct || [],
-          favoriteProduct: saved?.favoriteProduct || [],
+          cartProduct: refreshCatalogItems(saved?.cartProduct || []),
+          favoriteProduct: refreshCatalogItems(saved?.favoriteProduct || []),
         };
       },
     }

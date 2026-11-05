@@ -83,7 +83,7 @@ const CartProduct = ({ product }: { product: ProductProps }) => {
             You are saving{" "}
             <span className="text-sm font-semibold text-green-500">
               <FormattedPrice
-                amount={product?.regularPrice! - product?.discountedPrice!}
+                amount={(product.regularPrice - product.discountedPrice) * product.quantity}
               />
             </span>{" "}
             upon purchase

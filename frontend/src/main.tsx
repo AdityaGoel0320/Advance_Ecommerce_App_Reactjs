@@ -21,6 +21,7 @@ import Orders from "./pages/Orders.tsx";
 import IdPage from "./pages/IdPage.tsx";
 import { handleImageError, handleImageLoad } from "./lib/imageFallback.ts";
 import { applyTheme, readTheme } from "./lib/theme.ts";
+import Loading from "./ui/Loading.tsx";
 
 applyTheme(readTheme());
 document.addEventListener("error", handleImageError, true);
@@ -107,5 +108,5 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <RouterProvider router={router} fallbackElement={<Loading label="Preparing the storefront..." />} />
 );

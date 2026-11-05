@@ -1,5 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import * as catalog from "../../backend/constants/index.mjs";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const sources = {
   headphones: "photo-1505740420928-5e560c06d30e",
@@ -15,29 +14,27 @@ const sources = {
 };
 
 const imageGroups = {
-  headphones: ["cat-Headphone.webp", "headphone.jpg", "earbuds.webp", "highlights-One.webp"],
+  headphones: ["cat-Headphone.webp", "headphone.jpg", "highlights-One.webp"],
   phone: ["catPhone.webp", "phone.webp", "phoneTwo.jpg", "highlights-Two.webp"],
   watch: ["cat-Smart-Watch.webp", "cat-Sport-Watch.webp", "smart-Watch.webp", "sport-Watch.jpg", "watchTwo.jpg", "watch-Three.jpg"],
   laptop: ["cat-Computer.webp", "laptop.webp", "blogOne.webp"],
   camera: ["cat-Camera.webp", "camera.webp", "wifi-Camera.webp", "blog-Three.webp"],
-  gaming: ["cat-Gaming.webp", "gaming-Controller.webp", "usb.jpg"],
-  tablet: ["cat-Tablet.webp", "writing-Tablet.webp"],
-  speaker: ["cat-Tv-Audio.webp", "catTvBox.webp", "tvBox.webp", "bluetooth-Speaker.webp", "home-Speaker.webp", "soundBox.webp", "speaker.webp", "mp3-Player.webp", "highlights-Three.webp", "blogTwo.webp"],
-  tools: ["cat-Powertool.webp", "hand-Drill.jpg", "blueGun.jpg"],
+  gaming: ["usb.jpg"],
+  tablet: ["cat-Tablet.webp"],
+  speaker: ["cat-Tv-Audio.webp", "bluetooth-Speaker.webp", "home-Speaker.webp", "soundBox.webp", "speaker.webp", "highlights-Three.webp", "blogTwo.webp"],
+  tools: ["cat-Powertool.webp", "hand-Drill.jpg"],
   vacuum: ["cat-Robot-Clean.webp", "vaccum-Cleaner.webp", "vaccum.webp"],
+  "tv-box.svg": ["catTvBox.webp", "tvBox.webp"],
+  "controller.svg": ["cat-Gaming.webp", "gaming-Controller.webp"],
+  "writing-tablet.svg": ["writing-Tablet.webp"],
+  "glue-gun.svg": ["blueGun.jpg"],
+  "earbuds.svg": ["earbuds.webp"],
+  "music-player.svg": ["mp3-Player.webp"],
+  "security-camera.svg": ["wifi-Camera.webp"],
 };
 
-const urls = new Set();
-function collectImages(value) {
-  if (typeof value === "string") {
-    if (value.startsWith("https://i.ibb.co/")) urls.add(value);
-  } else if (Array.isArray(value)) {
-    value.forEach(collectImages);
-  } else if (value && typeof value === "object") {
-    Object.values(value).forEach(collectImages);
-  }
-}
-collectImages(catalog);
+const previous = JSON.parse(await readFile(new URL("../src/lib/catalogImages.json", import.meta.url), "utf8"));
+const urls = new Set(Object.keys(previous));
 
 const directory = new URL("../public/catalog/", import.meta.url);
 await mkdir(directory, { recursive: true });
@@ -71,7 +68,7 @@ if (failures.length) {
     const filename = new URL(url).pathname.split("/").pop();
     const group = Object.entries(imageGroups).find(([, filenames]) => filenames.includes(filename))?.[0];
     if (!group) throw new Error(`No representative product image configured for ${url}`);
-    manifest[url] = `/catalog/${group}.jpg`;
+    manifest[url] = `/catalog/${group.includes(".") ? group : `${group}.jpg`}`;
   }
   await writeFile(
     new URL("../src/lib/catalogImages.json", import.meta.url),

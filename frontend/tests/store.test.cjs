@@ -16,6 +16,13 @@ function loadStore(getDoc, persistedState) {
     exports: module.exports,
     require: (name) => {
       if (name === "./firebase") return { auth, db: {} };
+      if (name === "./catalog") {
+        const catalog = require("../../shared/products.json");
+        return { refreshCatalogItems: (items) => items.map((item) => {
+          const product = catalog.find((product) => product._id === item._id);
+          return product ? { ...product, quantity: item.quantity } : item;
+        }) };
+      }
       if (name === "firebase/firestore") return { doc: () => ({}), getDoc };
       return require(name);
     },
@@ -78,4 +85,17 @@ test("a missing Firestore avatar does not override the Firebase profile photo", 
   await store.getState().getUserInfo("test-user");
   assert.equal(store.getState().currentUser.avatar, "https://storage.example/avatar.jpg");
   assert.equal(store.getState().currentUser.email, "customer@example.com");
+});
+
+test("legacy cart prices, descriptions and images refresh without losing quantities", () => {
+  const { store } = loadStore(async () => ({}), {
+    cartProduct: [{ _id: 2010, quantity: 3, discountedPrice: 40, description: "Lorem ipsum", images: ["/catalog/speaker.jpg"] }],
+    favoriteProduct: [{ _id: 2013, quantity: 1, discountedPrice: 20 }],
+  });
+  const phone = store.getState().cartProduct[0];
+  assert.equal(phone.quantity, 3);
+  assert.equal(phone.discountedPrice, 14999);
+  assert.equal(phone.images[0], "/catalog/phone.jpg");
+  assert.doesNotMatch(phone.description, /lorem/i);
+  assert.equal(store.getState().favoriteProduct[0].images[0], "/catalog/tv-box.svg");
 });

@@ -32,7 +32,7 @@ const BannerCategories = () => {
           <img
             src={item?.image}
             alt="cat-image"
-            className="w-9 h-9 rounded-lg bg-white object-contain"
+            className="h-11 w-11 shrink-0 rounded-full border border-line bg-muted object-cover"
           />
           <p className="text-sm font-semibold">{item?.name}</p>
         </Link>
