@@ -8,7 +8,7 @@ export function readTheme(): Theme {
   } catch (error) {
     console.error("Unable to read theme preference", error);
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "light";
 }
 
 export function applyTheme(theme: Theme) {

@@ -15,11 +15,8 @@ const ThemeToggle = () => {
     const onStorage = (event: StorageEvent) => {
       if (event.key === themeStorageKey || event.key === null) sync();
     };
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    media.addEventListener("change", sync);
     window.addEventListener("storage", onStorage);
     return () => {
-      media.removeEventListener("change", sync);
       window.removeEventListener("storage", onStorage);
     };
   }, []);

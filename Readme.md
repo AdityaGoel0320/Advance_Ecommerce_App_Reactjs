@@ -3,12 +3,13 @@
 YourKart is a responsive storefront built with React, TypeScript, Vite, Tailwind CSS,
 Express, Firebase, and Stripe test checkout.
 
-[Live deployment](https://shopp-my-frontend.vercel.app/) may lag behind this repository.
+[Live deployment](https://yourkart-online.vercel.app/) may lag behind this repository.
 
 ## Features
 
 - Responsive product grids, search, categories, pagination, cart, and favorites.
 - Persistent light/dark themes, accessible loading states, and reduced-motion support.
+  New visits default to light; an explicitly saved theme choice is respected.
 - Matching YourKart branding and a custom shopping-bag SVG favicon.
 - Firebase Authentication, editable profiles, and optional profile photo uploads.
 - A shared 25-product catalog with descriptive copy and illustrative INR pricing.

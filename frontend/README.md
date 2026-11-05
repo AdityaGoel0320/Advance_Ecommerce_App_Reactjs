@@ -4,7 +4,7 @@
 
 The storefront uses Tailwind CSS with shared semantic color tokens, responsive
 navigation, product grids, and accessible motion. Use the sun/moon button in the
-header to switch themes. The initial theme follows your system preference;
+header to switch themes. The initial theme is light regardless of system preference;
 an explicit choice is saved locally and synchronized between tabs.
 Animations respect `prefers-reduced-motion`. Search, account, cart, checkout,
 and orders retain their existing API and store integrations.

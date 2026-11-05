@@ -32,15 +32,15 @@ function loadTheme(saved, systemDark = false, blocked = false) {
   return { ...module.exports, root, storage, errors };
 }
 
-test("first visit follows the system theme", () => {
-  assert.equal(loadTheme(undefined, true).readTheme(), "dark");
+test("first visit defaults to light regardless of the system theme", () => {
+  assert.equal(loadTheme(undefined, true).readTheme(), "light");
   assert.equal(loadTheme(undefined, false).readTheme(), "light");
 });
 
-test("saved theme overrides the system and invalid values do not", () => {
+test("saved choices are respected and invalid values default to light", () => {
   assert.equal(loadTheme("light", true).readTheme(), "light");
   assert.equal(loadTheme("dark", false).readTheme(), "dark");
-  assert.equal(loadTheme("invalid", true).readTheme(), "dark");
+  assert.equal(loadTheme("invalid", true).readTheme(), "light");
 });
 
 test("switching themes updates the document and persists the choice", () => {
@@ -56,7 +56,7 @@ test("switching themes updates the document and persists the choice", () => {
 
 test("blocked storage still applies the theme and reports persistence failure", () => {
   const theme = loadTheme(undefined, true, true);
-  assert.equal(theme.readTheme(), "dark");
+  assert.equal(theme.readTheme(), "light");
   assert.equal(theme.saveTheme("light"), false);
   assert.equal(theme.root.dataset.theme, "light");
   assert.equal(theme.errors.length, 2);
