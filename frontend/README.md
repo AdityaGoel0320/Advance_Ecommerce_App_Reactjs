@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# YourKart Frontend
 
 ## Storefront UI
 

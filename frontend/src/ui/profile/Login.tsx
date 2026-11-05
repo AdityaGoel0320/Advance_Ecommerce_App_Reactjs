@@ -117,7 +117,7 @@ const Login = ({ setLogin }: any) => {
       </form>
 
       <p className="px-6 text-sm leading-6 text-subtle text-center">
-        New to Commerce?{" "}
+        New to YourKart?{" "}
         <button
           onClick={() => setLogin(false)}
           className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"

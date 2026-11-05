@@ -86,7 +86,7 @@ const IdPage = () => {
         <h2 className="text-2xl md:text-4xl font-bold text-center">
           {loading
             ? "Your order payment is processing..."
-            : "Your Payment Accepted by ecommercepro.com"}
+            : "Your payment was accepted by YourKart"}
         </h2>
         <p>
           {loading ? "Once done" : "Now"} you can view your Orders or continue

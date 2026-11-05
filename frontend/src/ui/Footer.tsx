@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="mt-10">
       <FooterTop />
       <Container className="flex flex-col md:flex-row items-center gap-5 justify-between py-6 text-xs text-subtle">
-        <div><Link to="/" className="text-lg font-bold text-ink">commerce<span className="text-indigo-500">.</span></Link><p className="mt-1">&copy; {new Date().getFullYear()} Commerce. All rights reserved.</p></div>
+        <div><Link to="/" className="text-lg font-bold text-ink">YourKart<span className="text-indigo-500">.</span></Link><p className="mt-1">&copy; {new Date().getFullYear()} YourKart. All rights reserved.</p></div>
         <nav aria-label="Footer navigation" className="flex gap-5">
           <Link to="/product" className="hover:text-indigo-500">Discover</Link>
           <Link to="/orders" className="hover:text-indigo-500">Orders</Link>

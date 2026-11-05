@@ -70,11 +70,11 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center gap-3 px-4 py-4 sm:px-6 lg:gap-8 lg:px-8">
-        <Link to="/" aria-label="Commerce home" className="flex shrink-0 items-center gap-2.5">
+        <Link to="/" aria-label="YourKart home" className="flex shrink-0 items-center gap-2.5">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-            <FiShoppingBag size={21} />
+            <img src={`${import.meta.env.BASE_URL}yourkart.svg`} alt="" className="h-10 w-10" />
           </span>
-          <span className="text-xl font-bold tracking-tight">commerce<span className="text-indigo-500">.</span></span>
+          <span className="text-xl font-bold tracking-tight">YourKart<span className="text-indigo-500">.</span></span>
         </Link>
         <div className="relative order-3 w-full lg:order-none lg:flex-1">
           <label htmlFor="product-search" className="sr-only">Search products</label>

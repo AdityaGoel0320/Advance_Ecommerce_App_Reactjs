@@ -1,6 +1,6 @@
-# Commerce - E-commerce Demo
+# YourKart - E-commerce Demo
 
-A responsive storefront built with React, TypeScript, Vite, Tailwind CSS,
+YourKart is a responsive storefront built with React, TypeScript, Vite, Tailwind CSS,
 Express, Firebase, and Stripe test checkout.
 
 [Live deployment](https://shopp-my-frontend.vercel.app/) may lag behind this repository.
@@ -9,6 +9,7 @@ Express, Firebase, and Stripe test checkout.
 
 - Responsive product grids, search, categories, pagination, cart, and favorites.
 - Persistent light/dark themes, accessible loading states, and reduced-motion support.
+- Matching YourKart branding and a custom shopping-bag SVG favicon.
 - Firebase Authentication, editable profiles, and optional profile photo uploads.
 - A shared 25-product catalog with descriptive copy and illustrative INR pricing.
 - Filled and fractional stars based on each product's rating, with a numeric
