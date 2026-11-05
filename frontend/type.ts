@@ -55,8 +55,10 @@ export interface UserTypes {
 }
 
 export interface OrderTypes {
-  orderItems: [ProductProps];
+  orderItems: ProductProps[];
   paymentId: string;
   paymentMethod: string;
   userEmail: string;
+  totalAmount?: number;
+  createdAt?: number;
 }

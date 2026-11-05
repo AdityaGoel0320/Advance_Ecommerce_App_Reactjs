@@ -3,11 +3,10 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { OrderTypes, ProductProps } from "../../type";
-import { db } from "../lib/firebase";
+import { loadOrders } from "../lib/orders";
 import { store } from "../lib/store";
 import Container from "../ui/Container";
 import Loading from "../ui/Loading";
@@ -16,31 +15,34 @@ import { Link } from "react-router-dom";
 import { resolveCatalogImage } from "../lib/catalogImage";
 
 const Orders = () => {
-  const { currentUser } = store();
+  const { currentUser, isLoading } = store();
   const [orders, setOrders] = useState<OrderTypes[]>([]);
-  const [loading, setLoading] = useState(false);
-  // const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  const email = currentUser?.email;
 
   useEffect(() => {
+    let active = true;
+    setOrders([]);
+    setError("");
+    if (isLoading) { setLoading(true); return; }
+    if (!email) { setLoading(false); return; }
     const getData = async () => {
       setLoading(true);
       try {
-        const docRef = doc(db, "orders", currentUser?.email!);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const orderData = docSnap?.data()?.orders;
-          setOrders(orderData);
-        } else {
-          console.log("No orders yet!");
-        }
+        const orderData = await loadOrders(email);
+        if (active) setOrders(orderData);
       } catch (error) {
-        console.log("Data fetching error", error);
+        console.error("Unable to load orders", error);
+        if (active) setError("Unable to load your orders. Please retry or contact support.");
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
     getData();
-  }, []);
+    return () => { active = false; };
+  }, [email, isLoading, attempt]);
 
   // const handleNavigate = (props: number) => {
   //   navigate(`/product/${props}`);
@@ -48,8 +50,18 @@ const Orders = () => {
 
   return (
     <Container>
-      {loading ? (
+      {loading || isLoading ? (
         <Loading />
+      ) : !email ? (
+        <div className="panel p-8 text-center">
+          <p className="mb-4">Sign in to view your orders.</p>
+          <Link to="/profile" className="primary-button">Sign in</Link>
+        </div>
+      ) : error ? (
+        <div className="panel p-8 text-center">
+          <p role="alert" className="mb-4 text-red-600 dark:text-red-400">{error}</p>
+          <button type="button" className="primary-button" onClick={() => setAttempt((value) => value + 1)}>Retry loading orders</button>
+        </div>
       ) : orders?.length > 0 ? (
         <div className="panel max-w-5xl mx-auto p-5 sm:p-8 break-words">
           <h2 className="text-3xl font-bold mt-1">Customer order details</h2>
@@ -69,7 +81,7 @@ const Orders = () => {
           <div className="flex flex-col gap-3">
             <div className="space-y-6 divide-y divide-gray-900/10">
               {orders.map((order: OrderTypes) => {
-                const totalAmount = order?.orderItems.reduce(
+                const totalAmount = order.totalAmount ?? order?.orderItems.reduce(
                   (acc, item) =>
                     acc + (item.discountedPrice * item?.quantity || 0),
                   0
@@ -108,7 +120,7 @@ const Orders = () => {
                               <span className="text-skyText">
                                 #{order?.paymentId.substring(0, 20)}...
                               </span>{" "}
-                              has shipped and will be with you soon.
+                              is confirmed. This demo does not track shipping.
                             </p>
                             <div className="flex flex-col gap-1">
                               <p className="text-gray-600">

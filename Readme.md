@@ -119,6 +119,20 @@ demo catalog has realistic illustrative prices and unique descriptions. Cart
 and wishlist records refresh by ID; Stripe uses authoritative catalog prices
 and descriptions plus the same delivery/tax estimates shown in the cart.
 Historical paid order amounts stay unchanged.
+After Stripe returns, the app verifies the paid session with the backend and
+recovers purchased items independently of the current cart (including older
+sessions whose product names match the catalog). It saves orders in Firestore
+at `orders/{checkoutEmail}` using a transaction keyed by payment session ID,
+so refreshing or retrying cannot duplicate an order. The cart clears only
+after a successful save if it still matches the purchased items; recovering an
+older payment preserves a newer cart. Verification and Firestore failures show
+a retry action.
+Orders wait for Firebase sign-in and reload when the account changes. To recover
+a previously missing purchase, reopen its `/success/{CHECKOUT_SESSION_ID}` link
+while signed in with the checkout email. Firestore rules must permit that
+authenticated account to read and write its own order document. For production,
+use authenticated server-side fulfillment with Stripe webhooks so fulfillment
+does not depend on a customer returning to the confirmation page.
 The account dashboard supports editable names and profile photos,
 with initials when no photo exists. Uploads accept JPG, PNG, and WebP up to 5 MB
 and require the configured Firebase Storage permissions.
@@ -136,6 +150,14 @@ In the Firebase project used by `client/src/lib/firebase.ts`:
    Authentication's authorized domains. Add `localhost` for local testing if needed.
 - Verify Firestore and Storage rules allow each authenticated user to access only
    their own permitted data. Do not make either service publicly writable.
+- Deploy the versioned Firestore rules from the repository root with
+   `npx firebase-tools deploy --only firestore:rules --project ecommerceyt-2646a`.
+   The rules allow individual profile access by Firebase UID and order access by
+   the signed-in email. Orders are append-only; listing collections, deleting
+   orders, changing historical orders, and accessing another account are denied.
+   These demo rules do not cryptographically prove payment: production orders
+   must instead be written by a trusted server after Stripe verification.
+   Storage rules are separate and are not changed by this deployment.
 - Verify the Storage bucket is active and billing requirements are satisfied if
    profile photo uploads are enabled.
 

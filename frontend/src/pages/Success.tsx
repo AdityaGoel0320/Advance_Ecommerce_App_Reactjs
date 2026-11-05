@@ -1,107 +1,65 @@
-import { Link,  useNavigate , useParams} from "react-router-dom";
-import Container from "../ui/Container";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { store } from "../lib/store";
-import {
-  // DocumentSnapshot,
-  arrayUnion,
-  doc,
-  getDoc,
-  // serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../lib/firebase";
 import toast from "react-hot-toast";
+import Container from "../ui/Container";
 import Loading from "../ui/Loading";
+import { store } from "../lib/store";
+import { confirmAndSaveOrder } from "../lib/orders";
+import { backendUrl } from "../assets/FrontendUtils";
 
 const Success = () => {
-  const { currentUser, cartProduct, resetCart } = store();
-  // const location = useLocation();
-  const {sessionId} = useParams();
-  console.log(sessionId)
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const { currentUser, isLoading, resetCart } = store();
+  const { sessionId } = useParams();
+  const email = currentUser?.email;
+  const [status, setStatus] = useState<"pending" | "saved" | "error">("pending");
+  const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    if (!sessionId) {
-      console.log(sessionId)
-      navigate("/");
-    } else if (cartProduct.length > 0) {
-      const saveOrder = async () => {
-        try {
-          setLoading(true);
+    if (isLoading || !email || !sessionId) return;
+    let active = true;
+    setStatus("pending");
+    setError("");
+    confirmAndSaveOrder(`${backendUrl}/checkout/confirm`, sessionId, email)
+      .then(({ order, newlySaved }) => {
+        const state = store.getState();
+        const matchesPurchase = state.cartProduct.length === order.orderItems.length &&
+          state.cartProduct.every((item) => order.orderItems.some((paid) =>
+            paid._id === item._id && paid.quantity === item.quantity && paid.discountedPrice === item.discountedPrice));
+        if (newlySaved && state.currentUser?.email === email && matchesPurchase) resetCart();
+        if (!active) return;
+        setStatus("saved");
+        toast.success("Payment confirmed and order saved!");
+      })
+      .catch((saveError: unknown) => {
+        console.error("Unable to confirm and save order", saveError);
+        if (!active) return;
+        const message = saveError instanceof Error ? saveError.message : "Unable to save your order. Please retry.";
+        setError(message);
+        setStatus("error");
+        toast.error(message);
+      });
+    return () => { active = false; };
+  }, [isLoading, email, sessionId, resetCart, attempt]);
 
-          const orderRef = doc(db, "orders", currentUser?.email!);
-          const docSnap = await getDoc(orderRef);
-
-          if (docSnap.exists()) {
-            // Document exists, update the orderItems array
-            await updateDoc(orderRef, {
-              orders: arrayUnion({
-                userEmail: currentUser?.email,
-                paymentId: sessionId,
-                orderItems: cartProduct,
-                paymentMethod: "stripe",
-                userId: currentUser?.id,
-              }), // Use arrayUnion to append new items to existing array
-            });
-          } else {
-            // Document doesn't exist, create a new one
-            await setDoc(orderRef, {
-              orders: [
-                {
-                  userEmail: currentUser?.email,
-                  paymentId: sessionId,
-                  orderItems: cartProduct,
-                  paymentMethod: "stripe",
-                },
-              ],
-            });
-          }
-          // await setDoc(doc(db, "orders", currentUser?.id!), {
-          //   userEmail: currentUser?.email,
-          //   paymentId: sessionId,
-          //   orderItems: cartProduct,
-          //   paymentMethod: "stripe",
-          //   paymentTime: serverTimestamp(),
-          // });
-          toast.success("Payment accepted successfully & order saved!");
-          resetCart();
-        } catch (error) {
-          console.log("Error saving order data", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      saveOrder();
-    }
-  }, [sessionId, navigate, currentUser, cartProduct]);
-
+  const pending = isLoading || (!!email && !!sessionId && status === "pending");
   return (
     <Container>
-      {loading && <Loading />}
       <div className="panel min-h-[400px] p-6 text-center flex flex-col items-center justify-center gap-y-5">
-        <h2 className="text-2xl md:text-4xl font-bold text-center">
-          {loading
-            ? "Your order payment is processing..."
-            : "Your Payment Accepted by ecommercepro.com"}
+        {pending && <Loading compact />}
+        <h2 className="text-2xl md:text-4xl font-bold">
+          {!sessionId ? "Missing payment confirmation" : pending ? "Confirming your payment and saving your order..."
+            : !email ? "Sign in to finish saving your order"
+              : status === "saved" ? "Payment confirmed - your order is saved" : "Your order could not be saved"}
         </h2>
-        <p>
-          {loading ? "Once done" : "Now"} you can view your Orders or continue
-          Shopping with us
-        </p>
+        {error && <p role="alert" className="text-red-600 dark:text-red-400">{error}</p>}
+        {sessionId && <p className="text-sm text-subtle break-all">Payment reference: {sessionId}</p>}
+        {!isLoading && !email && <p>Sign in with your checkout email, then return to this confirmation link.</p>}
+        {status === "error" && email && <button type="button" className="primary-button" onClick={() => setAttempt((value) => value + 1)}>Retry saving order</button>}
         <div className="flex flex-wrap justify-center items-center gap-3">
-          <Link to={"/orders"}>
-            <button className="primary-button w-52">
-              View Orders
-            </button>
-          </Link>
-          <Link to={"/"}>
-            <button className="primary-button w-52">
-              Continue Shopping
-            </button>
-          </Link>
+          {!isLoading && !email && <Link to="/profile" className="primary-button">Sign in</Link>}
+          {status === "saved" && <Link to="/orders" className="primary-button w-52">View Orders</Link>}
+          <Link to="/" className="secondary-button w-52">Continue Shopping</Link>
         </div>
       </div>
     </Container>

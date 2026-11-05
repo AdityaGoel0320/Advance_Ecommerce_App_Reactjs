@@ -16,7 +16,7 @@ function compile(file, context) {
   return module.exports;
 }
 
-function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }) {
+function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }, routePath = "/checkout", sessions = {}) {
   let handler;
   const errors = [];
   compile("../../backend/routes/checkout.mjs", {
@@ -24,8 +24,8 @@ function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }) {
     URL,
     console: { error: (...args) => errors.push(args) },
     require: (name) => {
-      if (name === "express") return { Router: () => ({ post: (_path, callback) => { handler = callback; } }) };
-      if (name === "stripe") return { default: class { checkout = { sessions: { create: createSession } }; } };
+      if (name === "express") return { Router: () => ({ post: (_path, callback) => { if (_path === routePath) handler = callback; } }) };
+      if (name === "stripe") return { default: class { checkout = { sessions: { create: createSession, ...sessions } }; } };
       if (name === "../constants/index.mjs") return {
         products: require("../../shared/products.json"),
         checkoutCharges: require("../../shared/checkoutCharges.json"),
@@ -45,6 +45,47 @@ function loadRoute(createSession, env = { STRIPE_SECRET_KEY: "test-fixture" }) {
 }
 
 const item = { _id: 2007, name: "Old headphones", description: "Lorem ipsum", quantity: 2, discountedPrice: 12.34, images: ["/image-unavailable.svg"], isStock: true };
+
+test("payment confirmation recovers paid products and totals without a cart, including older sessions", async () => {
+  for (const metadata of [{ productId: "2007" }, {}]) {
+    const route = loadRoute(null, undefined, "/checkout/confirm", {
+      retrieve: async () => ({
+        id: "cs_test", status: "complete", payment_status: "paid", currency: "inr",
+        customer_email: "test@example.com", amount_total: 359840, created: 12345,
+      }),
+      listLineItems: async () => ({ has_more: false, data: [
+        { description: "Foldable Wireless Over-Ear Headphones", quantity: 2, price: { unit_amount: 179900, product: { metadata, description: "Purchased description" } } },
+        { description: "Delivery estimate", quantity: 1, price: { unit_amount: 2500 } },
+        { description: "Tax estimate", quantity: 1, price: { unit_amount: 1500 } },
+      ] }),
+    });
+    const result = await route({ sessionId: "cs_test", email: "test@example.com" });
+    assert.equal(result.statusCode, 200);
+    assert.equal(result.data.order.orderItems.length, 1);
+    assert.equal(result.data.order.orderItems[0]._id, 2007);
+    assert.equal(result.data.order.orderItems[0].quantity, 2);
+    assert.equal(result.data.order.orderItems[0].discountedPrice, 1799);
+    assert.equal(result.data.order.totalAmount, 3598.4);
+  }
+});
+
+test("payment confirmation rejects unpaid, wrong-account and unrecoverable sessions", async () => {
+  for (const [session, lines, expected] of [
+    [{ payment_status: "unpaid" }, [], 409],
+    [{ customer_email: "other@example.com" }, [], 403],
+    [{ currency: "usd" }, [], 502],
+    [{}, [{ description: "Unknown item", quantity: 1, price: { unit_amount: 100 } }], 502],
+  ]) {
+    const route = loadRoute(null, undefined, "/checkout/confirm", {
+      retrieve: async () => ({ id: "cs_test", status: "complete", payment_status: "paid", currency: "inr", customer_email: "test@example.com", amount_total: 100, ...session }),
+      listLineItems: async () => ({ has_more: false, data: lines }),
+    });
+    const result = await route({ sessionId: "cs_test", email: "test@example.com" });
+    assert.equal(result.statusCode, expected);
+    assert.ok(result.data.error);
+    assert.equal(result.data.order, undefined);
+  }
+});
 
 test("backend returns Stripe URL, uses current storefront and omits local image URLs", async () => {
   let payload;
